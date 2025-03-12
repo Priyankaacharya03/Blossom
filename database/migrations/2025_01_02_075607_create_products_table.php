@@ -13,15 +13,16 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('slug')->unique();
             $table->string('product_name');
             $table->decimal('price', 10, 2);
-            $table->decimal('discounted_price', 10, 2)->nullable();
+            $table->decimal('discount_amount', 10, 2)->nullable();
+            $table->double('actual_amount')->default(0.0);
             $table->text('description')->nullable();
             $table->integer('stock');
             $table->string('primary_image')->nullable();
-            $table->string('slug')->unique();
             $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('vendor_id');
+            $table->unsignedBigInteger('vendor_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
             $table->timestamps();
