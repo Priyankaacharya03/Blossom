@@ -11,14 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permanent_address', function (Blueprint $table) {
+        Schema::create('shipping_addresses', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('email');
             $table->string('address');
-            $table->string('city');
-            $table->string('landmark')->nullable();
             $table->string('phone_number');
+            $table->string('landmark')->nullable();
+            $table->string('postal_code');
+            $table->string('street_no')->nullable();
+            $table->string('state')->nullable();
+            $table->boolean('is_permanent')->default(false);
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // Foreign key
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permanent_address');
+        Schema::dropIfExists('shipping_address');
     }
 };

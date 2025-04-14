@@ -31,6 +31,13 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         'otp_expires_at',
     ];
 
+    public function shippingAddresses()
+    {
+        return $this->hasMany(ShippingAddress::class, 'user_id', 'id');
+    }
+
+   
+
     /**
      * The attributes that should be hidden for serialization.
      *

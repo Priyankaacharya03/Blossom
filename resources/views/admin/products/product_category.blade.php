@@ -16,7 +16,7 @@
         <div class="modal fade" id="productCategory" tabindex="-1" aria-labelledby="productCategoryLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="{{ route('admin.product-category.store') }}" method="post">
+                    <form action="{{ route('admin.product-category.store') }}" method="post" enctype="multipart/form-data">
                         <div class="modal-header">
                             <h5 class="modal-title" id="productCategoryLabel">Add Category</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -26,10 +26,11 @@
                             <div class="mb-3">
                                 <label for="" class="form-label">Name</label>
                                 <input
-                                    type="name"
+                                    type="text"
                                     class="form-control"
                                     name="name"
-                                    id=""
+                                    id="name"
+                                    value="{{ old('name') }}"
                                     aria-describedby="nameHelpId" />
                                 @error('name')
                                 <small id="nameHelpId" class="form-text text-danger">{{ $message }}</small>
@@ -44,6 +45,19 @@
                                 </select>
                                 @error('status')
                                 <small class="form-text text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="image" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> image</span></label>
+                                <input
+                                    type="file"
+                                    class="form-control"
+                                    name="image"
+                                    id="image"
+                                    accept="image/*" />
+                                @error('image')
+                                <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -71,6 +85,7 @@
                                         <th scope="col">SN</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Status</th>
+                                        <th scope="col">Image</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -81,6 +96,9 @@
                                         <td>{{ $category->category_name }}</td>
                                         <td>{{ $category->status }}</td>
                                         <td>
+                                            <img src="{{ asset('storage/'. $category->image) }}" alt="" width="80px" height="70px">
+                                        </td>
+                                        <td>
                                             <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCategory{{ $category->id }}">
                                                 Edit
@@ -90,7 +108,7 @@
                                             <div class="modal fade" id="editCategory{{ $category->id }}" tabindex="-1" aria-labelledby="editCategory{{ $category->id }}Label" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
-                                                        <form action="{{ route('admin.product-category.update',$category->id) }}" method="post">
+                                                        <form action="{{ route('admin.product-category.update',$category->id) }}" method="post" enctype="multipart/form-data">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="editCategory{{ $category->id }}Label">Edit Category</h5>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -121,6 +139,28 @@
                                                                     <small class="form-text text-danger">{{ $message }}</small>
                                                                     @enderror
                                                                 </div>
+
+                                                                <div class="mb-3">
+                                                                    <label for="image" class="form-label">Current Image</label> <br>
+                                                                    @if($category->image)
+                                                                    <img src="{{ asset('storage/' . $category->image) }}" alt="Product Image" width="200" class="mb-3">
+                                                                    @else
+                                                                    <p class="text-muted">No Image Available</p>
+                                                                    @endif
+
+                                                                    <label for="image" class="form-label d-block ">
+                                                                        Upload New Image
+                                                                    </label>
+                                                                    <input
+                                                                        type="file"
+                                                                        class="form-control"
+                                                                        name="image"
+                                                                        id="image" />
+                                                                    @error('image')
+                                                                    <div class="text-danger">{{ $message }}</div>
+                                                                    @enderror
+                                                                </div>
+
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

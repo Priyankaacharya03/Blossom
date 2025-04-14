@@ -42,6 +42,6 @@ class GoogleAuthController extends Controller
         Auth::login($user);
 
         toastr()->success('Login Success.');
-        return redirect()->route('home');
+        return redirect()->route('index');
     }
 }

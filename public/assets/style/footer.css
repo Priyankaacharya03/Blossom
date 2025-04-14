@@ -1,0 +1,9 @@
+.footer {
+    background-color: rgb(237, 238, 239);
+    color: rgb(0, 0, 0);
+    padding: 3rem 0;
+}
+
+.social-icons a {
+    font-size: 1.25rem;
+}
