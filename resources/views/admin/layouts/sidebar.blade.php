@@ -14,7 +14,7 @@
 
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        <li class="menu-item active">
+        <li class="menu-item {{ request()->routeIs('admin.dashboard') ? 'active':'' }}">
             <a href="{{ route('admin.dashboard') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
@@ -22,24 +22,24 @@
         </li>
 
         <!-- Layouts -->
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('admin.product*')? 'active open' : ''}}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Products">Products</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item {{ request()->routeIs('admin.product.category.index')? 'active' : ''}}">
                     <a href="{{ route('admin.product-category.index') }}" class="menu-link">
                         <div data-i18n="Product Category">Product Category</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item {{ request()->routeIs('admin.product.index')? 'active' : ''}}">
                     <a href="{{ route('admin.product.index') }}" class="menu-link">
                         <div data-i18n="Products">Products</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item {{ request()->routeIs('admin.product.create')? 'active' : ''}}">
                     <a href="{{ route('admin.product.create') }}" class="menu-link">
                         <div data-i18n="Add Product">Add Product</div>
                     </a>
@@ -47,18 +47,18 @@
             </ul>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('admin.user*')? 'active open' : ''}}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
                 <div data-i18n="Account Settings">Users</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item {{ request()->routeIs('admin.user.index')? 'active open' : ''}}">
                     <a href="{{ route('admin.user.index') }}" class="menu-link">
                         <div data-i18n="Account">User List</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item {{ request()->routeIs('admin.user.create')? 'active open' : ''}}">
                     <a href="{{ route('admin.user.create') }}" class="menu-link">
                         <div data-i18n="Notifications">Create User</div>
                     </a>
@@ -68,25 +68,27 @@
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
-                <div data-i18n="Authentications">Authentications</div>
+                <div data-i18n="Vendors">Vendors</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="auth-login-basic.html" class="menu-link" target="_blank">
-                        <div data-i18n="Basic">Login</div>
+                    <a href="{{ route('admin.vendor.request') }}" class="menu-link">
+                        <div data-i18n="Basic">Request</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="auth-register-basic.html" class="menu-link" target="_blank">
-                        <div data-i18n="Basic">Register</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="auth-forgot-password-basic.html" class="menu-link" target="_blank">
-                        <div data-i18n="Basic">Forgot Password</div>
+                    <a href="" class="menu-link">
+                        <div data-i18n="Basic">Vendors</div>
                     </a>
                 </li>
             </ul>
+        </li>
+
+        <li class="menu-item {{ request()->routeIs('admin.carousel') ? 'active':'' }}">
+            <a href="{{ route('admin.carousel.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Carousels</div>
+            </a>
         </li>
     </ul>
 </aside>

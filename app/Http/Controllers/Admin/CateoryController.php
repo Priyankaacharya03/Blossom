@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class CateoryController extends Controller
 {
@@ -18,12 +20,14 @@ class CateoryController extends Controller
         $request->validate([
             'name' => 'required | string',
             'status' => 'nullable|boolean', // Ensures status is either true (1) or false (0)
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
 
         ]);
 
         $category = new Category();
         $category->category_name = $request->name;
         $category->status = $request->status ?? 1; // Default to active if not provided
+        $category->image =  $request->file('image')->store('categories', 'public');
         $category->save();
 
         toastr()->success('Category added successfully!');
@@ -38,12 +42,27 @@ class CateoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'status' => 'required|in:1,0', // Assuming status can be 'active' or 'inactive'
+            'image' => 'required|image|max:4096',
+
         ]);
+        $category = Category::findOrFail($id);
+
+        // Initialize $imagePath in case no image is uploaded
+        $imagePath = $category->image;
+
+        if ($request->hasFile('image')) { // Check if image is uploaded /  image xa ki nai check gareko
+
+            if ($category->image) { // Check if an image already exists in the database
+                Storage::delete($category->image); // Delete the old image
+            }
+            $imagePath = $request->file('image')->store('categories', 'public');
+        }
+
 
         $category->category_name = $request->name;
         $category->status = $request->status;
+        $category->image =   $imagePath;
         $category->save();
-
         toastr()->success('Category updated successfully');
         return redirect()->route('admin.product-category.index');
     }

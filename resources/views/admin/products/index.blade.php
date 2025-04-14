@@ -28,9 +28,10 @@
                                     <th scope="col">Name</th>
                                     <th scope="col">Price</th>
                                     <th scope="col">Stock</th>
-                                    <th scope="col">Discount Amount</th>
+                                    <th scope="col">Discount Percent</th>
                                     <th scope="col">Category</th>
                                     <th scope="col">Image</th>
+                                    <th scope="col">Is Feature</th>
                                     <th scope="col">Vendor Name</th>
                                     <th scope="col">Action</th>
                                 </tr>
@@ -42,32 +43,35 @@
                                     <td>{{ $product->product_name }}</td>
                                     <td>{{ $product->price }}</td>
                                     <td>{{ $product->stock }}</td>
-                                    <td>{{ $product->discount_amount }}</td>
+                                    <td>{{ $product->discount_percent }}</td>
                                     <td>{{ $product->category->category_name }}</td>
                                     <td>
                                         <img src="{{ asset('storage/'. $product->primary_image) }}" alt="" width="80px" height="70px">
                                     </td>
+                                    <td>{{ $product->is_feature ? "Yes": "No"}}</td>
                                     <td>{{ $product->vendor->vendor_name ?? 'N/A' }}</td>
                                     <td>
-                                        <div class="d-flex gap-2">
-                                            <a
-                                                name=""
-                                                id=""
-                                                class="btn btn-primary btn-sm"
-                                                href="{{ route('admin.product.edit',$product->id) }}"
-                                                role="button">Edit</a>
+                                        <div class="dropdown">
+                                            <!-- Dropdown trigger -->
+                                            <i class="bi bi-three-dots" data-bs-toggle="dropdown" role="button" style="cursor: pointer;" aria-expanded="false"></i>
 
-                                            <form action="{{ route('admin.product.delete',$product->id) }}" onclick="return confirm('Are you sure you want to delete this product? This action cannot be undone.')" method="post" class="d-inline-block">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-danger btn-sm">
-                                                    Delete
-                                                </button>
-                                            </form>
+                                            <!-- Dropdown menu -->
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="{{ route('admin.product.edit', $product->id) }}">Edit</a>
+
+                                                <form action="{{ route('admin.product.delete', $product->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this product? This action cannot be undone.')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item">Delete</button>
+                                                </form>
+
+                                                <a href="{{ route('admin.product.images.index', $product->id) }}" class="dropdown-item">
+                                                    Product Images
+                                                </a>
+                                            </div>
                                         </div>
                                     </td>
+
                                 </tr>
                                 @endforeach
                             </tbody>

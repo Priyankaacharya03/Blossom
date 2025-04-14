@@ -10,10 +10,11 @@ class Product extends Model
         'slug',
         'product_name',
         'price',
-        'discounted_price',
-        'actual_price',
+        'discount_percent',
         'description',
         'stock',
+        'primary_image',
+        'is_feature',
         'category_id',
         'vendor_id',
 
@@ -32,5 +33,22 @@ class Product extends Model
     public function cart()
     {
         return $this->hasMany(Cart::class, 'product_id', 'id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
+    // Calculate discount amount based on discount_percent
+    public function getDiscountAmountAttribute()
+    {
+        return ($this->price * $this->discount_percent) / 100;
+    }
+
+    // Calculate actual price after discount
+    public function getActualAmountAttribute()
+    {
+        return $this->price - $this->getDiscountAmountAttribute();
     }
 }

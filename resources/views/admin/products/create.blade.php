@@ -59,14 +59,14 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="discount_amount" class="form-label"><span class="text-capitalize"> discount amount</span></label>
+                                    <label for="discount_percent" class="form-label"><span class="text-capitalize"> discount percent</span></label>
                                     <input
                                         type="text"
                                         class="form-control"
-                                        name="discount_amount"
-                                        id="discount_amount"
-                                        value="{{ old('discount_amount') }}" />
-                                    @error('discount_amount')
+                                        name="discount_percent"
+                                        id="discount_percent"
+                                        value="{{ old('discount_percent') }}" />
+                                    @error('discount_percent')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -92,7 +92,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="image" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> image</span></label>
+                                <label for="image" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> Primary Image</span></label>
                                 <input
                                     type="file"
                                     class="form-control"
@@ -103,6 +103,29 @@
                                 <div class="text-danger">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="mb-3">
+                                <label for="image" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> Product Images</span></label>
+                                <input
+                                    type="file"
+                                    class="form-control"
+                                    name="product_image[]"
+                                    id="image"
+                                    multiple />
+                                @error('product_image')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="" class="form-label">Is Feature</label>
+                                <div class="form-check">
+                                    <input type="hidden" value="0" name="is_feature" />
+                                    <input class="form-check-input" type="checkbox" value="1" name="is_feature" id="featureProduct" />
+                                    <label class="form-check-label" for="featureProduct">This will ensure whether to show or not in feature products </label>
+                                </div>
+                            </div>
+
 
                             <div class="mb-3">
                                 <label for="description" class="form-label"><span class="text-capitalize"> description</span></label>

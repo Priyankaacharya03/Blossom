@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -32,10 +33,12 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'discount_amount' => 'nullable|numeric|min:0|lt:price',
-            'image' => 'required|image|max:4096',
+            'discount_percent' => 'nullable|numeric|min:0|lt:price',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'is_feature' => 'sometimes | boolean',
             'description' => 'nullable|string',
             'vendor_name' => 'nullable| string',
+            'product_images.*' => 'nullable|image',
         ]);
 
         //This ensures no duplicate slugs in the products table
@@ -44,20 +47,28 @@ class ProductController extends Controller
             $slug = Str::slug($request->name) . '-' . rand(1, 100);
         }
 
+        // dd($request->all());
         $product = new Product();
         $product->product_name = $request->name;
         $product->slug = $slug;
         $product->category_id = $request->category_id;
         $product->price = $request->price;
         $product->stock = $request->stock;
-        $discount_amount = $request->discount_amount ?? 0;
-        $product->discount_amount = $discount_amount;
+        $discount_percent = $request->discount_percent ?? 0;
+        $product->discount_percent = $discount_percent;
         $product->primary_image =  $request->file('image')->store('products', 'public');
+        $product->is_feature = $request->is_feature;
         $product->description = $request->description;
-        $product->actual_amount = ($request->price - $request->discount_amount);
         // $product->vendor_id = Auth::id();
         // $product->vendor_id = "";
         $product->save();
+
+        foreach ($request->product_image as $image) {
+            $product_image = new ProductImage();
+            $product_image->product_image = $image->store('productImages', 'public');
+            $product_image->product_id = $product->id;
+            $product_image->save();
+        }
 
         toastr()->success('Product added successfully');
         return redirect()->route('admin.product.index');
@@ -77,8 +88,9 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'discount_amount' => 'nullable|numeric|min:0|lt:price',
-            'image' => 'image|max:4096',
+            'discount_percent' => 'nullable|numeric|min:0|lt:price',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:5120',
+            'product_images' => 'nullable|image',
             'description' => 'nullable|string',
             'vendor_name' => 'nullable|string',
         ]);
@@ -106,11 +118,10 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->price = $request->price;
         $product->stock = $request->stock;
-        $discount_amount = $request->discount_amount ?? 0;
-        $product->discount_amount = $discount_amount;
+        $discount_percent = $request->discount_percent ?? 0;
+        $product->discount_percent = $discount_percent;
         $product->primary_image =  $imagePath;
         $product->description = $request->description;
-        $product->actual_amount = ($request->price - $request->discount_amount);
         $product->vendor_id = Auth::id();
         $product->save();
 

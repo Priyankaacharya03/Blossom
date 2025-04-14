@@ -31,18 +31,6 @@
                             @endif
                         </div>
                         <div class="mb-3">
-                            <label for="gender" class="form-label">Gender</label>
-                            <select id="gender" name="gender" class="form-select" required>
-                                <option value="" disabled selected>Select your gender</option>
-                                <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
-                                <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
-                                <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
-                            </select>
-                            @if ($errors->has('gender'))
-                            <span class="text-danger small">{{ $errors->first('gender') }}</span>
-                            @endif
-                        </div>
-                        <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" id="password" name="password" class="form-control" required>
                             @if ($errors->has('password'))

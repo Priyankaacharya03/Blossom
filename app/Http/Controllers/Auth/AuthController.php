@@ -18,17 +18,20 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
-    public function loginSubmit(Request $req)
+    public function loginSubmit(Request $request)
     {
-        $req->validate([
+        $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
         //sab ma try catch
 
-        if (Auth::attempt($req->only('email', 'password'))) {
-            toastr()->success('Login Success');
-            return redirect()->route('home');
+        if (Auth::attempt($request->only('email', 'password'))) {
+            toastr()->success('You have been login Successfully');
+            if (Auth::user()->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            }
+            return redirect()->route('index');
         }
 
         toastr()->error('Incorrect Username or password.');
@@ -41,18 +44,17 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function registerSubmit(Request $req)
+    public function registerSubmit(Request $request)
     {
-        $req->validate([
+        $request->validate([
             'name' => 'required | string',
             'email' => 'required | email | unique:users',
-            'gender' => 'required',
             'password' => 'required | confirmed | min:8 | max :30',
         ]);
 
         // return $req->all(); //return all the values in the form submitted by user
 
-        $user_type = UserType::create(['role' => 'customer']);
+        // $user_type = UserType::create(['role' => 'customer']);
 
         // $user = User::create([
         //     'name' => $req->name,
@@ -66,11 +68,10 @@ class AuthController extends Controller
         $expiresAt = Carbon::now()->addMinutes(5); // OTP expires in 5 minutes
 
         $user = User::create([
-            'name' => $req->name,
-            'email' => $req->email,
-            'gender' => $req->gender,
-            'password' => Hash::make($req->password),
-            'user_type_id' => $user_type->id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'customer',
             'otp' => $otp,
             'otp_expires_at' => $expiresAt,
 
@@ -79,7 +80,10 @@ class AuthController extends Controller
         $this->sendOTP($user);
 
         session(['email' => $user->email]); // Store email in session
-        return redirect()->route('verify.form')->with('success', 'OTP sent to your email.');
+        toastr()->success('OTP sent to your email.');
+        return redirect()->route('verify.form');
+
+        // ->with('success', 'OTP sent to your email.');
 
         // event(new Registered($user));
 
@@ -95,16 +99,6 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    // public function home()
-    // {
-    //     return view('site/pages/home');
-    // }
-
-    //vendor register
-    public function vendorRegister()
-    {
-        return view('site.pages.become_a_seller');
-    }
 
     // Send OTP via Email
     private function sendOTP($user)

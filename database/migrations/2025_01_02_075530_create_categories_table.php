@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('category_name');
             $table->boolean('status')->default(1); // 1 means "active", 0 means "hidden"
+            $table->string('image');
             $table->timestamps();
         });
     }

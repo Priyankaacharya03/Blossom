@@ -60,14 +60,14 @@
                                 </div>
 
                                 <div class=" col-md-6">
-                                    <label for="discount_amount" class="form-label"><span class="text-capitalize"> discount amount</span></label>
+                                    <label for="discount_percent" class="form-label"><span class="text-capitalize"> discount percent</span></label>
                                     <input
                                         type="text"
                                         class="form-control"
-                                        name="discount_amount"
-                                        id="discount_amount"
-                                        value="{{old('diccount_amount', $product->discount_amount ) }}" />
-                                    @error('discount_amount')
+                                        name="discount_percent"
+                                        id="discount_percent"
+                                        value="{{old('diccount_amount', $product->discount_percent ) }}" />
+                                    @error('discount_percent')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
