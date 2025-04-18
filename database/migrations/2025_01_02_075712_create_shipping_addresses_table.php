@@ -23,7 +23,9 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->boolean('is_permanent')->default(false);
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('order_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->timestamps();
         });
     }

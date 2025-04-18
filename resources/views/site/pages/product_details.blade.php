@@ -198,6 +198,15 @@
                     </div>
                 </div>
             </div>
+            @if ($product->vendor)
+            <div>
+                <a href="{{ route('vendor.details',$product->vendor->id) }}">
+                    {{ $product->vendor->vendor_name }}
+                </a>
+            </div>
+            @endif
+
+
 
         </div>
     </div>

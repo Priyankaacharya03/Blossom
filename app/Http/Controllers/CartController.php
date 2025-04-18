@@ -160,6 +160,21 @@ class CartController extends Controller
         $user_id = Auth::user()->id;
         $user = Auth::user();
 
+        //Get users cart items
+        $carts = Cart::where('user_id', $user_id)->get();
+
+        $totalAmount = $carts->sum(function ($cart) {
+            return $cart->product->price * $cart->quantity;
+        });
+
+        //create new order instance
+        $order = new Order();
+        $order->user_id = $user_id;
+        $order->order_status = 'pending';
+        $order->total_amount = $totalAmount;
+        $order->payment_method = $request->payment_method;
+        $order->save();
+
         $shippingInfo = null;
 
 
@@ -179,6 +194,7 @@ class CartController extends Controller
             $shippingInfo->street_no = $request->street_no;
             $shippingInfo->state = $request->state;
             $shippingInfo->is_permanent = $request->is_permanent;
+            $shippingInfo->order_id = $order->id;
             $shippingInfo->save();
         } else {
             // dd($request->all());
@@ -194,6 +210,7 @@ class CartController extends Controller
             $shippingInfo->state = $request->state;
             $shippingInfo->is_permanent = $request->is_permanent;
             $shippingInfo->user_id = $user_id;
+            $shippingInfo->order_id = $order->id;
             $shippingInfo->save();
         }
 
@@ -202,21 +219,7 @@ class CartController extends Controller
 
         // dd('test');
 
-        //Get users cart items
-        $carts = Cart::where('user_id', $user_id)->get();
 
-        $totalAmount = $carts->sum(function ($cart) {
-            return $cart->product->price * $cart->quantity;
-        });
-
-        //create new order instance
-        $order = new Order();
-        $order->user_id = $user_id;
-        $order->order_status = 'pending';
-        $order->total_amount = $totalAmount;
-        $order->shipping_address_id = $shippingInfo->id;
-        $order->payment_method = $request->payment_method;
-        $order->save();
 
         // dd($order);
         $orderItems = [];
@@ -244,11 +247,11 @@ class CartController extends Controller
         }
 
         Mail::to($user->email)->send(new OrderConformationMail($user->name, $order, $orderItems));
-        
+
         $paymentMethod = 'COD';
 
         $transaction_id =  null;
-        
+
 
         toastr()->success('Order successfully');
         return view('site.pages.order_confirm', compact('order', 'paymentMethod', 'orderItems', 'transaction_id'));

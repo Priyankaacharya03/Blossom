@@ -17,9 +17,7 @@ return new class extends Migration
             $table->enum('order_status', ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'])->default('pending');
             $table->string('payment_method');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('shipping_address_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('shipping_address_id')->references('id')->on('shipping_addresses')->onDelete('cascade');
             $table->timestamps();
         });
     }

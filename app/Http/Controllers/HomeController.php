@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -39,5 +41,50 @@ class HomeController extends Controller
         // ];
 
         return view('site.pages.search', compact('products', 'categories'));
+    }
+
+
+    public function getWishlist()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('userHome')->with('error', 'You need to login to view your wishlist.');
+        }
+
+        $wishlists = Wishlist::with('product')
+            ->where('user_id', auth()->id())
+            ->paginate(12);
+
+        return view('site.pages.wishlist', compact('wishlists'));
+    }
+
+
+    public function getAddOnWhishlist($id)
+    {
+        if (Auth::check()) {
+            $check = Wishlist::where('product_id', $id)
+                ->where('user_id', Auth()->user()->id)
+                ->count();
+
+            if ($check === 0) {
+                $wishlist = new Wishlist;
+                $wishlist->product_id = $id;
+                $wishlist->user_id = Auth()->user()->id;
+                $wishlist->save();
+
+                // return response()->json(['status' => 'added']);
+                toastr()->success('wishlist added successfully');
+                return redirect()->route('index');
+            } else {
+                Wishlist::where('product_id', $id)
+                    ->where('user_id', Auth()->user()->id)
+                    ->delete();
+
+                // return response()->json(['status' => 'removed']);
+                toastr()->success('Wishlist removed successfully');
+                return redirect()->route('index');
+            }
+        } else {
+            return redirect()->route('login')->with('error', 'You need to login to add to wishlist.');
+        }
     }
 }

@@ -406,6 +406,23 @@
         background-color: var(--rose-gold-dark);
     }
 
+    #searchInput {
+        transition: width 0.3s ease;
+        width: 0;
+        opacity: 0;
+    }
+
+    #searchInput:focus {
+        width: 200px;
+        opacity: 1;
+    }
+
+    #searchIcon {
+        background-color: transparent;
+        border: none;
+    }
+
+
     /* Responsive adjustments */
     @media (max-width: 991px) {
         .product-grid {
@@ -490,6 +507,19 @@
         line-height: 1.5;
         border-radius: 0.3rem;
     }
+
+    /* Wishlist Icon */
+    .wishlist-icon {
+        font-size: 1.6rem;
+        color: rgba(255, 255, 255, 0.9);
+        cursor: pointer;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        z-index: 1;
+    }
+
+    .wishlist-icon.active {
+        color: #e74c3c;
+    }
 </style>
 </head>
 
@@ -547,7 +577,7 @@
             <div class="carousel-wrapper">
                 <div class="categories-carousel" id="carousel">
                     @foreach($categories as $category)
-                    <a href="#" class="category-item">
+                    <a href="{{ route('category.show', $category->id) }}" class="category-item">
                         <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="category-img">
                         <div class="category-overlay">
                             <h3 class="category-name">{{ $category->category_name }}</h3>
@@ -668,17 +698,25 @@
 
                 <div class="col">
                     <div class="product-card bg-white">
+
                         <div class="img-container">
+                            <a href="{{route('getAddOnWhishlist', $product->id)}}" class="text-decoration-none" title="Wishlist">
+                                <i class="bi bi-heart wishlist-icon"></i>
+                            </a>
                             <a href="{{ route('product.details', $product->id) }}" style="text-decoration: none;">
                                 <img src="{{ asset('storage/' . $product->primary_image) }}" alt="{{ $product->product_name }}">
-                                <!-- <span class="best-seller-badge">Best Seller</span> -->
+                            </a>
+                            <!-- <span class="best-seller-badge">Best Seller</span> -->
                         </div>
                         <div class="product-info">
                             <h3 class="product-name">{{ $product->product_name }}</h3>
                             <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
                                 <span class="original-price">Rs.{{ $product->price }}</span>
                                 <span class="actual-price">Rs.{{ $product->actual_amount }}</span>
+
                                 <span class="discount-badge">{{ $product->discount_amount }}% OFF</span>
+
+
                             </div>
                         </div>
                         <div class="add-to-cart-container">
@@ -698,6 +736,38 @@
         window.addEventListener("DOMContentLoaded", () => {
             const carousel = document.getElementById("carousel");
             carousel.innerHTML += carousel.innerHTML;
+        });
+    </script>
+
+    <script>
+        // Toggle wishlist icon to add in a wishlist card
+        const wishlistIcons = document.querySelectorAll('.wishlist-icon');
+
+        wishlistIcons.forEach(icon => {
+            icon.addEventListener('click', function() {
+                this.classList.toggle('active');
+
+                // Get product ID
+                const productId = this.getAttribute('data-product-id');
+
+                // Make an AJAX call to update wishlist in the backend
+                fetch(`/wishlist/${productId}`, {
+                        method: 'GET',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update the state based on the response
+                        if (data.status === 'added') {
+                            this.classList.add('active');
+                        } else if (data.status === 'removed') {
+                            this.classList.remove('active');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
         });
     </script>
 

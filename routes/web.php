@@ -7,6 +7,8 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\Admin\CateoryController;
+
 use App\Http\Middleware\AuthCheckMiddleware;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Route;
@@ -16,19 +18,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('index');
 
-
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
 
 Route::get('/product-details/{id}', [ProductController::class, 'productDetails'])->name('product.details');
 
-
 Route::get('/blog', function () {
     return view('site.pages.blog');
 })->name('blog');
-
-
-
-
 
 Route::middleware([AuthCheckMiddleware::class])->group(function () {
 
@@ -58,11 +54,19 @@ Route::middleware([AuthCheckMiddleware::class])->group(function () {
 
     Route::get('/search', [HomeController::class, 'search'])->name('search');
 
+    Route::get('/wishlist', [HomeController::class, 'getWishlist'])->name('wishlist');
+
+    Route::get('/wishlist/{id}', [HomeController::class, 'getAddOnWhishlist'])->name('getAddOnWhishlist');
+
+
+
 
     Route::get('/khati/return', [PaymentController::class, 'return']);
+
+
+
+    Route::get('/category/{id}', [CateoryController::class, 'showCategory'])->name('category.show');
 });
-
-
 
 
 require __DIR__ . '/auth.php';

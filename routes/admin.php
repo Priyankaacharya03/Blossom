@@ -5,8 +5,10 @@ use App\Http\Controllers\Admin\CateoryController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProductImagesController;
+use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +34,12 @@ Route::prefix('admin')->as('admin.')->middleware(['admin'])->group(function () {
         Route::delete('/images/delete/{id}', [ProductImageController::class, 'delete'])->name('images.delete');
     });
 
+    Route::prefix('product-subcategory')->as('product-subcategory.')->group(function () {
+        Route::get('/', [SubcategoryController::class, 'index'])->name('index');
+        Route::post('/store', [SubcategoryController::class, 'store'])->name('store');
+        Route::put('/edit/{id}', [SubcategoryController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [SubcategoryController::class, 'delete'])->name('delete');
+    });
 
     Route::prefix('product-category')->as('product-category.')->group(function () {
         Route::get('/', [CateoryController::class, 'index'])->name('index');
@@ -44,6 +52,9 @@ Route::prefix('admin')->as('admin.')->middleware(['admin'])->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/create', [UserController::class, 'create'])->name('create');
         Route::post('/store', [UserController::class, 'store'])->name('store');
+        Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
+        Route::put('/update/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/delete/{id}', [UserController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('vendor')->as('vendor.')->group(function () {
@@ -57,5 +68,11 @@ Route::prefix('admin')->as('admin.')->middleware(['admin'])->group(function () {
         Route::post('/store', [CarouselController::class, 'store'])->name('store');
         Route::put('/update/{id}', [CarouselController::class, 'update'])->name('update');
         Route::delete('/delete/{id}', [CarouselController::class, 'delete'])->name('delete');
+    });
+
+    Route::prefix('order')->as('order.')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::get('/items/{id}', [OrderController::class, 'getOrderItems'])->name('items');
+        Route::post('/status/{id}', [OrderController::class, 'updateStatus'])->name('update.status');
     });
 });

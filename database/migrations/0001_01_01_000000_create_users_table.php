@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('profile_img')->nullable();
-            $table->enum('role', ['admin', 'vendor', 'customer'])->default('customer');
+            $table->enum('role', ['admin', 'vendor', 'user'])->default('user');
             $table->string('google_id')->nullable();
             $table->string('otp')->nullable();
             $table->timestamp('otp_expires_at')->nullable();

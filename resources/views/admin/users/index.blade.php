@@ -27,7 +27,6 @@
                                     <th scope="col">S.N</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Gender</th>
                                     <th scope="col">Profile</th>
                                     <th scope="col">Role</th>
                                     <th scope="col">Action</th>
@@ -39,7 +38,6 @@
                                     <td scope="row">{{ $loop->iteration }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td>{{ $user->gender }}</td>
                                     <td>
                                         <img src="{{ asset('storage/'. $user->profile_img) }}" alt="" width="80px" height="70px">
                                     </td>
@@ -50,16 +48,14 @@
                                                 name=""
                                                 id=""
                                                 class="btn btn-primary btn-sm"
-                                                href=""
+                                                href="{{ route('admin.user.edit',$user->id) }}"
                                                 role="button">Edit</a>
 
-                                            <form action="">
 
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-danger btn-sm">
-                                                    Delete
-                                                </button>
+                                            <form action="{{ route('admin.user.delete', $user->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item">Delete</button>
                                             </form>
                                         </div>
                                     </td>
@@ -72,6 +68,5 @@
             </div>
         </div>
     </div>
-
 </div>
 @endsection

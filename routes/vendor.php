@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Vendor\HomeController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\CategoryController;
@@ -34,5 +35,13 @@ Route::middleware([AuthCheckMiddleware::class])->group(function () {
             Route::put('/update/{id}', [ProductController::class, 'update'])->name('update');
             Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('delete');
         });
+
+
+        Route::prefix('order')->as('order.')->group(function () {
+            Route::get('/', [OrderController::class, 'index'])->name('index');
+          
+        });
+
+        Route::get('/details/{id}', [VendorController::class, 'getVendorDetails'])->name('details');
     });
 });

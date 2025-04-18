@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Auth\Events\Validated;
@@ -18,7 +19,6 @@ class VendorController extends Controller
 
         return view('site.pages.become_a_seller', compact('vendor'));
     }
-
 
     public function store(Request $request,  $id = null)
     {
@@ -90,7 +90,6 @@ class VendorController extends Controller
         return view('admin.vendor.vendor_request', compact('vendorRequests'));
     }
 
-
     public function handleRequest(Request $request, $id)
     {
         $validated = $request->validate([
@@ -112,5 +111,15 @@ class VendorController extends Controller
 
         toastr()->success('Request has been updated to ' . $request->status);
         return redirect()->back();
+    }
+
+
+    //order
+    public function getVendorDetails($id)
+    {
+        $vendor = Vendor::find($id);
+        $products = Product::where('vendor_id', $vendor->id)->get();
+
+        return view('vendor.vendor_products', compact('vendor', 'products'));
     }
 }

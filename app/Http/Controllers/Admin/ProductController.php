@@ -38,7 +38,7 @@ class ProductController extends Controller
             'is_feature' => 'sometimes | boolean',
             'description' => 'nullable|string',
             'vendor_name' => 'nullable| string',
-            'product_images.*' => 'nullable|image',
+            'product_image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         //This ensures no duplicate slugs in the products table
@@ -54,8 +54,7 @@ class ProductController extends Controller
         $product->category_id = $request->category_id;
         $product->price = $request->price;
         $product->stock = $request->stock;
-        $discount_percent = $request->discount_percent ?? 0;
-        $product->discount_percent = $discount_percent;
+        $product->discount_percent = $request->discount_percent ?? 0;
         $product->primary_image =  $request->file('image')->store('products', 'public');
         $product->is_feature = $request->is_feature;
         $product->description = $request->description;
@@ -63,11 +62,13 @@ class ProductController extends Controller
         // $product->vendor_id = "";
         $product->save();
 
-        foreach ($request->product_image as $image) {
-            $product_image = new ProductImage();
-            $product_image->product_image = $image->store('productImages', 'public');
-            $product_image->product_id = $product->id;
-            $product_image->save();
+        if ($request->hasFile('product_image')) {
+            foreach ($request->file('product_image') as $image) {
+                $product_image = new ProductImage();
+                $product_image->product_image = $image->store('productImages', 'public');
+                $product_image->product_id = $product->id;
+                $product_image->save();
+            }
         }
 
         toastr()->success('Product added successfully');

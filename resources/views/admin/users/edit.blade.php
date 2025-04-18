@@ -5,12 +5,12 @@
 @section('main-content')
 <div class="content-wrapper">
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Dashboard / User /</span> Create</h4>
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Dashboard / User /</span> Update</h4>
 
         <div class="row">
             <div class="col">
                 <div class="card mb-4">
-                    <h5 class="card-header">Add Users </h5>
+                    <h5 class="card-header">Edit Users </h5>
                     <div class="card-body">
                         <form action="{{ route('admin.user.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
@@ -22,7 +22,8 @@
                                         class="form-control"
                                         name="name"
                                         id="name"
-                                        value="{{ old('name') }}" />
+                                        value="{{ old('name',$user->name) }}" />
+
                                     @error('name')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -35,7 +36,7 @@
                                         class="form-control"
                                         name="email"
                                         id="email"
-                                        value="{{ old('email') }}" />
+                                        value="{{ old('email',$user->email) }}" />
                                     @error('email')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
@@ -102,7 +103,7 @@
                             <button
                                 type="submit"
                                 class="btn btn-primary">
-                                Add User
+                                Update User
                             </button>
                         </form>
                     </div>

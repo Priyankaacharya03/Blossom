@@ -102,7 +102,8 @@
     }
 
     .dropdown-item:hover {
-        background-color: #f8f9fa;
+        background-color: rgb(220, 219, 219);
+        width: auto;
     }
 
     .dropdown-item i {
@@ -160,7 +161,7 @@
                     </li>
                     @if(Auth::check() && Auth::user()->role === 'vendor')
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('become.a.seller') ? 'active' : '' }}" href="{{ route('vendor.dashboard') }}">Vendor Dashboard</a>
+                        <a class="nav-link {{ request()->routeIs('become.a.seller') ? 'active' : '' }}" href="{{ route('vendor.dashboard') }}"> Dashboard</a>
                     </li>
                     @else
                     <li class="nav-item">
@@ -174,14 +175,17 @@
             <a class="navbar-brand fw-bold mx-auto text-center" href="{{route('index')}}" style="transform: translateX(-50%); left: 50%; position: absolute;">Blossom</a>
 
             <div class="d-flex align-items-center ms-auto navbar-icons">
-                <form action="{{ route('search') }}">
-                    <input type="ssearch" name="keyword" placeholder="Search...">
-                    <i class="bi bi-search"></i>
+                <!-- Search Icon -->
+                <form action="{{ route('search') }}" id="searchForm" class="d-flex align-items-center">
+                    <button type="button" id="searchIcon" class="btn ">
+                        <i class="bi bi-search"></i>
+                    </button>
 
+                    <!-- Search Bar (Initially hidden) -->
+                    <input type="text" name="keyword" id="searchInput" class="form-control" placeholder="Search..." style="display: none;">
                 </form>
-                <a href="" class="text-decoration-none" title="Search">
-                </a>
-                <a href="#" class="text-decoration-none" title="Wishlist">
+
+                <a href="{{ route('wishlist') }}" class="text-decoration-none" title="Wishlist">
                     <i class="bi bi-heart"></i>
                 </a>
                 <a href="{{ route('cart.getCarts') }}" class="text-decoration-none position-relative" title="Cart">
@@ -239,12 +243,25 @@
             </div>
         </div>
     </nav>
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <!-- search -->
+    <!-- Add this script for toggle effect -->
+    <script>
+        // Get elements
+        const searchIcon = document.getElementById('searchIcon');
+        const searchInput = document.getElementById('searchInput');
+
+        // Add click event listener to the search icon
+        searchIcon.addEventListener('click', function() {
+            // Toggle visibility of search input
+            if (searchInput.style.display === 'none' || searchInput.style.display === '') {
+                searchInput.style.display = 'inline-block'; // Show the search bar
+                searchInput.focus(); // Focus on the input when it appears
+            } else {
+                searchInput.style.display = 'none'; // Hide the search bar
+            }
+        });
+    </script>
 
 </body>
 

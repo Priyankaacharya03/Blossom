@@ -34,6 +34,12 @@
                         <div data-i18n="Product Category">Product Category</div>
                     </a>
                 </li>
+                <li class="menu-item {{ request()->routeIs('admin.product.subcategory.index')? 'active' : ''}}">
+                    <a href="{{ route('admin.product-subcategory.index') }}" class="menu-link">
+                        <div data-i18n="Product Subcategory">Product Subcategory</div>
+                    </a>
+                </li>
+
                 <li class="menu-item {{ request()->routeIs('admin.product.index')? 'active' : ''}}">
                     <a href="{{ route('admin.product.index') }}" class="menu-link">
                         <div data-i18n="Products">Products</div>
@@ -81,6 +87,21 @@
                         <div data-i18n="Basic">Vendors</div>
                     </a>
                 </li>
+            </ul>
+        </li>
+
+        <li class="menu-item {{ request()->routeIs('admin.order*')? 'active open' : ''}}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Account Settings">Orders</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('admin.order.index')? 'active open' : ''}}">
+                    <a href="{{ route('admin.order.index') }}" class="menu-link">
+                        <div data-i18n="Account">Order</div>
+                    </a>
+                </li>
+
             </ul>
         </li>
 

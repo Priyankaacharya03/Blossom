@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -72,5 +73,15 @@ class CateoryController extends Controller
         $category->delete();
         toastr()->success('Category deleted successfully');
         return redirect()->route('admin.product-category.index');
+    }
+
+    public function showCategory($id)
+    {
+        $category = Category::findOrFail($id);
+
+        // Load products under this category (assuming relation exists)
+        $products = Product::where('category_id', $id)->get();
+
+        return view('site.pages.category_show', compact('category', 'products'));
     }
 }
