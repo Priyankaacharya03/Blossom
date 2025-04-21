@@ -12,8 +12,9 @@
                 <div class="card mb-4">
                     <h5 class="card-header">Edit Users </h5>
                     <div class="card-body">
-                        <form action="{{ route('admin.user.store') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('admin.user.update',$user->id) }}" method="post" enctype="multipart/form-data">
                             @csrf
+                            @method('PUT')
                             <div class=" row">
                                 <div class="col-md-6">
                                     <label for="name" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> name</span></label>
@@ -43,34 +44,54 @@
                                 </div>
                             </div>
 
-                            <div class=" row">
-                                <div class="col-md-6">
-                                    <label for="role" class="form-label">
-                                        <span class="text-danger">*</span> <span class="text-capitalize">Role</span>
-                                    </label>
-                                    <select class="form-control" name="role" id="role">
-                                        <option value="">Select a Role</option>
-                                        <option value="admin" @selected(old('role', $user->role ?? '') == 'admin')>Admin</option>
-                                        <option value="user" @selected(old('role', $user->role ?? '') == 'user')>User</option>
-                                    </select>
-                                    @error('role')
-                                    <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
 
-                                <div class="col-md-6">
-                                    <label for="image" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> image</span></label>
-                                    <input
-                                        type="file"
-                                        class="form-control"
-                                        name="image"
-                                        id="image"
-                                        value="{{ old('image') }}" />
-                                    @error('image')
-                                    <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="mb-3">
+                                <label for="role" class="form-label">
+                                    <span class="text-danger">*</span> <span class="text-capitalize">Role</span>
+                                </label>
+                                <select class="form-control" name="role" id="role">
+                                    <option value="">Select a Role</option>
+                                    <option value="admin" @selected(old('role', $user->role ?? '') == 'admin')>Admin</option>
+                                    <option value="user" @selected(old('role', $user->role ?? '') == 'user')>User</option>
+                                </select>
+                                @error('role')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
+
+
+                            <div class="mb-3">
+                                <label for="profile_img" class="form-label">
+                                    <span class="text-danger">*</span><span class="text-capitalize">Profile Image</span>
+                                </label>
+
+                                <!-- Display Current Profile Image -->
+                                @if($user->profile_img)
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Current Image</label> <br>
+                                    <img src="{{ asset('storage/users/' . $user->profile_img) }}" alt="Profile Image" width="200" class="mb-3">
+                                </div>
+                                @else
+                                <p class="text-muted">No Profile Image Available</p>
+                                @endif
+
+                                <!-- Upload New Profile Image -->
+                                <label for="profile_img" class="form-label d-block">
+                                    Upload New Image
+                                </label>
+                                <input
+                                    type="file"
+                                    class="form-control"
+                                    name="profile_img"
+                                    id="profile_img"
+                                    value="{{ old('profile_img') }}" />
+
+                                @error('profile_img')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+
 
                             <div class="row">
                                 <div class="col-md-6">

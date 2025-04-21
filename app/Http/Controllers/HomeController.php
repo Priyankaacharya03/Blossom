@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Product;
@@ -18,73 +17,64 @@ class HomeController extends Controller
         $featured_products = Product::orderByDesc('is_feature')->limit(3)->get();
         $products = Product::latest()->limit(15)->get();
         $cart = Cart::all();
-        return view('site.pages.home', compact('products', 'cart', 'featured_products', 'categories'));
+
+        $wishlists = Wishlist::all();
+
+        // Check if user is logged in
+        $wishlistCount = Auth::check() ? Wishlist::where('user_id', auth()->id())->count() : 0;
+
+        return view('site.pages.home', compact('products', 'cart', 'featured_products', 'categories', 'wishlistCount', 'wishlists'));
     }
 
-    public function shop()
+
+    public function shop(Request $request)
     {
+        $search = $request->query('search');
         $products = Product::all();
+        if ($search) {
+            // If search query exists, filter products by name
+            $products = Product::where('product_name', 'like', '%' . $search . '%')
+                ->with(['category'])
+                ->get();
+        } else {
+            // If no search query, get all products
+            $products = Product::with(['category'])->get();
+        }
         return view('site.pages.shop', compact('products'));
     }
 
-    public function search(Request $request)
-    {
-        $keyword = $request->input('keyword');
 
-        $products = Product::where('product_name', 'LIKE', "%$keyword%")->get();
-
-        $categories = Category::where('category_name', 'LIKE', "%$keyword%")->get();
-
-        // $data = [
-        //     'products' =>  Product::where('product_name', 'LIKE', "%$keyword%")->get(),
-        //     'categories' => Category::where('category_name', 'LIKE', "%$keyword%")->get()
-        // ];
-
-        return view('site.pages.search', compact('products', 'categories'));
-    }
-
-
+    // Display user's wishlist
     public function getWishlist()
     {
         if (!Auth::check()) {
-            return redirect()->route('userHome')->with('error', 'You need to login to view your wishlist.');
+            toastr()->error('You need to login to view your wishlist.');
+            return redirect()->route('login');
         }
 
         $wishlists = Wishlist::with('product')
-            ->where('user_id', auth()->id())
-            ->paginate(12);
+            ->where('user_id', auth()->id())->get();
+
 
         return view('site.pages.wishlist', compact('wishlists'));
     }
 
-
-    public function getAddOnWhishlist($id)
+    public function toggle($tourId)
     {
-        if (Auth::check()) {
-            $check = Wishlist::where('product_id', $id)
-                ->where('user_id', Auth()->user()->id)
-                ->count();
+        $user = auth()->user();
+        $exists = Wishlist::where('user_id', $user->id)->where('product_id', $tourId)->first();
 
-            if ($check === 0) {
-                $wishlist = new Wishlist;
-                $wishlist->product_id = $id;
-                $wishlist->user_id = Auth()->user()->id;
-                $wishlist->save();
-
-                // return response()->json(['status' => 'added']);
-                toastr()->success('wishlist added successfully');
-                return redirect()->route('index');
-            } else {
-                Wishlist::where('product_id', $id)
-                    ->where('user_id', Auth()->user()->id)
-                    ->delete();
-
-                // return response()->json(['status' => 'removed']);
-                toastr()->success('Wishlist removed successfully');
-                return redirect()->route('index');
-            }
+        if ($exists) {
+            $exists->delete();
+            toastr()->success('Removed from wishlist.');
+            return back();
         } else {
-            return redirect()->route('login')->with('error', 'You need to login to add to wishlist.');
+            Wishlist::create([
+                'user_id' => $user->id,
+                'product_id' => $tourId
+            ]);
+            toastr()->success('Added to wishlist.');
+            return back();
         }
     }
 }

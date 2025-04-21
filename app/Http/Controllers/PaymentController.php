@@ -55,6 +55,10 @@ class PaymentController extends Controller
             $payment->order_id = $request->purchase_order_id;
             $payment->save();
 
+            $order = Order::find($request->purchase_order_id);
+            $order->order_status = 'confirmed';
+            $order->save();
+
             $paymentMethod = 'khalti';
 
             $transaction_id = $request->transaction_id;

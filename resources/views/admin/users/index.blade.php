@@ -39,7 +39,7 @@
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>
-                                        <img src="{{ asset('storage/'. $user->profile_img) }}" alt="" width="80px" height="70px">
+                                        <img src="{{ asset('storage/users/'. $user->profile_img) }}" alt="" width="80px" height="70px">
                                     </td>
                                     <td>{{ $user->role  }}</td>
                                     <td>

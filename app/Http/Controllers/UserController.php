@@ -101,7 +101,12 @@ class UserController extends Controller
 
         // Get all orders for the logged-in user, with their related order items and products
         $orders = Order::with(['orderItems.product'])
-            ->where('user_id', $user_id)->latest()->get();
+        ->withCount('orderItems') // This will count the number of items in each order
+        ->where('user_id', $user_id)
+        ->latest()
+        ->get();
+    
+            // dd($orders);
 
         return view('site.pages.order', compact('orders'));
     }

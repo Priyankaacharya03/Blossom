@@ -58,14 +58,14 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="image" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> image</span></label>
+                                    <label for="profile_img" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> profile_img</span></label>
                                     <input
                                         type="file"
                                         class="form-control"
-                                        name="image"
-                                        id="image"
-                                        value="{{ old('image') }}" />
-                                    @error('image')
+                                        name="profile_img"
+                                        id="profile_img"
+                                        value="{{ old('profile_img') }}" />
+                                    @error('profile_img')
                                     <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>

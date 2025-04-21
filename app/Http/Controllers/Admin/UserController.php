@@ -7,12 +7,14 @@ use App\Models\User;
 use App\Models\UserType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::where('role', 'user')->get();
         return view('admin.users.index', compact('users'));
     }
 
@@ -27,16 +29,28 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'role' => 'required|in:admin,user',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'profile_img' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
             'password' => 'required | confirmed | min:8 | max :30',
 
         ]);
+
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->role = $request->role;
-        $user->profile_img = $request->image;
+
+        if ($request->hasFile('profile_img')) {
+            if ($user->profile_img) {
+                Storage::delete('public/users/' . $user->profile_img); // Delete the old image
+            }
+            $image = $request->file('profile_img');
+            $imageName = time() . rand(100000, 999999) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('/users', $imageName, 'public');
+            $user->profile_img = $imageName;
+        }
+
+        // $user->profile_img = $request->image;
         $user->password = Hash::make($request->password);
         $user->save();
 
@@ -54,24 +68,42 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => ['required', 'email', Rule::unique('users')->ignore($id)],  // Correct way to ignore current user's email
             'role' => 'required|in:admin,user',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'password' => 'required | confirmed | min:8 | max :30',
-
+            'profile_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'password' => 'nullable|confirmed|min:8|max:30',
         ]);
 
         $user = User::findOrFail($id);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->role = $request->role;
-        $user->profile_img = $request->image;
-        $user->password = Hash::make($request->password);
+
+        // If a new profile image is uploaded, handle the update
+        if ($request->hasFile('profile_img')) {
+            // If the user already has a profile image, delete it from storage
+            if ($user->profile_img) {
+                Storage::delete('public/users/' . $user->profile_img);
+            }
+
+            // Store the new profile image
+            $image = $request->file('profile_img');
+            $imageName = time() . rand(100000, 999999) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('/users', $imageName, 'public');
+            $user->profile_img = $imageName;  // Save the new image name in the database
+        }
+
+        // If a password is provided, update it
+        if ($request->password) {
+            $user->password = Hash::make($request->password);
+        }
+
         $user->save();
 
-        toastr()->success('User added sucessfully');
+        toastr()->success('User updated successfully');
         return redirect()->back();
     }
+
 
     public function delete($id)
     {

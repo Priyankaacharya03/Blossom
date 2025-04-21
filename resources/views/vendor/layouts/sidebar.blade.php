@@ -37,20 +37,6 @@
             </div>
         </div>
 
-        <!-- Users -->
-        <div class="sidebar-item">
-            <a href="#usersMenu" class="sidebar-link {{ request()->routeIs('vendor.user*') ? 'active' : '' }}"
-                data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->routeIs('vendor.user*') ? 'true' : 'false' }}">
-                <i class="bi bi-people"></i>
-                <span class="link-text">Users</span>
-                <i class="bi bi-chevron-down ms-auto toggle-icon"></i>
-            </a>
-            <div class="submenu collapse {{ request()->routeIs('vendor.user*') ? 'show' : '' }}" id="usersMenu">
-                <a href="{{ route('admin.user.index') }}" class="sidebar-link {{ request()->routeIs('admin.user.index') ? 'active' : '' }}">
-                    User List
-                </a>
-            </div>
-        </div>
 
         <!-- Orders -->
         <div class="sidebar-item">
@@ -72,7 +58,7 @@
 
 <style>
     :root {
-        --sidebar-bg: #bd8c7d;
+        --sidebar-bg: rgb(101, 101, 101);
         --sidebar-hover: rgba(255, 255, 255, 0.1);
         --sidebar-active: rgba(255, 255, 255, 0.2);
         --sidebar-width: 250px;
@@ -140,7 +126,7 @@
     }
 
     .sidebar-link.active {
-        background-color: var(--sidebar-active);
+        /* background-color: var(--sidebar-active); */
         color: white;
         font-weight: 500;
     }

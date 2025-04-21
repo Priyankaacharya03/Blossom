@@ -140,7 +140,9 @@
             <div class="col">
                 <div class="product-card bg-white">
                     <div class="img-container">
-                        <img src="{{ asset('storage/' . $product->primary_image) }}" alt="{{ $product->product_name }}">
+                        <a href="{{ route('product.details', $product->id) }}" style="text-decoration: none;">
+                            <img src="{{ asset('storage/' . $product->primary_image) }}" alt="{{ $product->product_name }}">
+                        </a>
                         <!-- <span class="best-seller-badge">Best Seller</span> -->
                     </div>
                     <div class="product-info">

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\OrderItem;
 
 class Order extends Model
 {
@@ -23,6 +24,17 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public static function productDetails($id)
+    {
+        // $items = OrderItem::whereIn('product')
+        // dd($id);
+    }
+
+    // public function product()
+    // {
+    //     return $this->belongsTo(OrderItem::class, 'product_id', 'id');
+    // }
 
     public function shippingAddress()
     {

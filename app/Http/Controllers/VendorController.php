@@ -33,7 +33,7 @@ class VendorController extends Controller
             'phone_number'        => 'required|digits:10',
             'pan_number'          => 'required|digits:9',
             'vendor_profile_img'  => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'document'            => 'nullable|mimes:pdf|max:5120',
+            'document'            => 'required|mimes:pdf|max:5120',
         ]);
 
 
@@ -63,9 +63,11 @@ class VendorController extends Controller
         if ($request->hasFile('document')) {
             $document = $request->file('document');
             $documentName = time() . rand(100000, 999999) . '.' . $document->getClientOriginalExtension();
+            // Store the document in 'documents' folder in public disk
             $document->storeAs('documents', $documentName, 'public');
             $vendor->document = $documentName;
         }
+
 
         $vendor->save(); // Don't forget to save the model after updating fields
 
@@ -90,6 +92,13 @@ class VendorController extends Controller
         return view('admin.vendor.vendor_request', compact('vendorRequests'));
     }
 
+
+    public function vendorRequestDetails()
+    {
+        $vendorRequestDetails = Vendor::where('vendor_status', 'pending')->get();
+        return view('admin.vendor.vendor_request_details', compact('vendorRequestDetails'));
+    }
+
     public function handleRequest(Request $request, $id)
     {
         $validated = $request->validate([
@@ -111,6 +120,13 @@ class VendorController extends Controller
 
         toastr()->success('Request has been updated to ' . $request->status);
         return redirect()->back();
+    }
+
+
+    public function showVendors()
+    {
+        $vendors = Vendor::where('vendor_status', 'active')->get();
+        return view('admin.vendor.index', compact('vendors'));
     }
 
 

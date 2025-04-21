@@ -73,17 +73,52 @@ class CartController extends Controller
         return redirect()->route('index');
     }
 
+    // public function updateCart(Request $request, $id)
+    // {
+    //     $cart = Cart::findOrFail($id);
+    //     $request->validate([
+    //         'quantity' => 'required|numeric|min:1',
+    //     ]);
+    //     $product = Product::where('product_id', $id)->first();
+    //     if ($product->stock > $request->quantity) {
+    //         toastr()->error('Only ' .  $product->stock  . ' items are available in stock.');
+    //         return redirect()->back();
+    //     }
+
+    //     $cart->quantity = $request->quantity;
+    //     $cart->save();
+    //     return redirect()->route('cart.getCarts');
+    // }
+
     public function updateCart(Request $request, $id)
     {
+        // Find the cart item
         $cart = Cart::findOrFail($id);
+
+        // Validate the quantity input
         $request->validate([
             'quantity' => 'required|numeric|min:1',
         ]);
 
+        // Find the product related to the cart item
+        $product = Product::where('id', $cart->product_id)->first(); // Assuming you use `product_id` to reference the product
+
+        // Check if requested quantity is more than the available stock
+        if ($request->quantity > $product->stock) {
+            // Display an error if the requested quantity exceeds stock
+            toastr()->error('Only ' . $product->stock . ' items are available in stock.');
+            return redirect()->back(); // Redirect back with error message
+        }
+
+        // Update the cart with the new quantity
         $cart->quantity = $request->quantity;
         $cart->save();
-        return redirect()->route('cart.getCarts');
+
+        // Optionally, you can show a success message when the cart is updated
+        toastr()->success('Cart updated successfully!');
+        return redirect()->back();
     }
+
 
     public function updateQuantity($id, $quantity)
     {
@@ -105,8 +140,6 @@ class CartController extends Controller
             'totals' => $totals
         ]);
     }
-
-
 
     public function delete($id)
     {
@@ -231,6 +264,7 @@ class CartController extends Controller
             $orderItem->price = $product->price;
             $orderItem->product_id = $cart->product_id;
             $orderItem->order_id = $order->id;
+            $orderItem->vendor_id = $product->vendor_id;
             $orderItem->save();
 
             $orderItem->product_name = $product->product_name;
@@ -240,11 +274,13 @@ class CartController extends Controller
 
         foreach ($carts as $cart) {
             $cart->delete();
-
-            if ($request->payment_method === 'khalti') {
-                return PaymentController::khaltiPay($totalAmount, $order);
-            }
         }
+        if ($request->payment_method === 'khalti') {
+            return PaymentController::khaltiPay($totalAmount, $order);
+        }
+
+        $order->order_status = 'confirmed';
+        $order->save();
 
         Mail::to($user->email)->send(new OrderConformationMail($user->name, $order, $orderItems));
 

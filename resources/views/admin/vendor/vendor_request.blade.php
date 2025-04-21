@@ -39,7 +39,6 @@
                                     <th scope="col">Email</th>
                                     <th scope="col">City</th>
                                     <th scope="col">Address</th>
-                                    <th scope="col">Phone Number</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -54,7 +53,6 @@
                                     <td>{{ $vendorRequest->vendor_email }}</td>
                                     <td>{{ $vendorRequest->city }}</td>
                                     <td>{{ $vendorRequest->vendor_address }}</td>
-                                    <td>{{ $vendorRequest->phone_number}}</td>
                                     <td>
                                         <div class="dropdown">
                                             <!-- Dropdown trigger -->
@@ -62,7 +60,7 @@
 
                                             <!-- Dropdown menu -->
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">View Details</a>
+                                                <a class="dropdown-item" href="{{ route('admin.vendor.request.details',$vendorRequest->id) }}">View Details</a>
 
                                                 <!-- Use a button styled like a dropdown-item to trigger modal -->
                                                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editVendorRequest{{ $vendorRequest->id }}">
@@ -125,7 +123,5 @@
         </div>
     </div>
 </div>
-</div>
 
-</div>
 @endsection

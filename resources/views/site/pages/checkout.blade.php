@@ -279,10 +279,10 @@
             <span class="summary-total" id="total">Rs {{ number_format($final_total, 2) }}</span>
           </div>
 
-          <div class="input-group mb-4">
+          <!-- <div class="input-group mb-4">
             <input type="text" class="form-control promo-input" id="promo-code" placeholder="Promo code" />
             <button class="btn promo-btn" id="apply-promo">Apply</button>
-          </div>
+          </div> -->
 
           <hr />
           <h6 class="summary-title">Items in Cart</h6>
@@ -308,8 +308,6 @@
 </section>
 
 
-
-
 <script>
   function clearForm() {
     document.querySelectorAll('#name, #email, #address, #phone_number, #landmark, #postal_code, #street_no').forEach(input => {
@@ -319,7 +317,6 @@
     document.querySelector('input[name="is_permanent"]').checked = false;
   }
 </script>
-
 
 
 @endsection

@@ -36,7 +36,13 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         return $this->hasMany(ShippingAddress::class, 'user_id', 'id');
     }
 
-   
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);  // Assuming the Wishlist model exists
+    }
+
+
+
 
     /**
      * The attributes that should be hidden for serialization.

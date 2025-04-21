@@ -27,19 +27,7 @@
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div data-i18n="Products">Products</div>
             </a>
-
             <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('admin.product.category.index')? 'active' : ''}}">
-                    <a href="{{ route('admin.product-category.index') }}" class="menu-link">
-                        <div data-i18n="Product Category">Product Category</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ request()->routeIs('admin.product.subcategory.index')? 'active' : ''}}">
-                    <a href="{{ route('admin.product-subcategory.index') }}" class="menu-link">
-                        <div data-i18n="Product Subcategory">Product Subcategory</div>
-                    </a>
-                </li>
-
                 <li class="menu-item {{ request()->routeIs('admin.product.index')? 'active' : ''}}">
                     <a href="{{ route('admin.product.index') }}" class="menu-link">
                         <div data-i18n="Products">Products</div>
@@ -52,6 +40,29 @@
                 </li>
             </ul>
         </li>
+
+        <li class="menu-item {{ request()->routeIs('admin.category*')? 'active open' : ''}}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Account Settings">Category</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ request()->routeIs('admin.product.category.index')? 'active' : ''}}">
+                    <a href="{{ route('admin.product-category.index') }}" class="menu-link">
+                        <div data-i18n="Product Category">Category</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('admin.product.subcategory.index')? 'active' : ''}}">
+                    <a href="{{ route('admin.product-subcategory.index') }}" class="menu-link">
+                        <div data-i18n="Product Subcategory">Subcategory</div>
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+
+
 
         <li class="menu-item {{ request()->routeIs('admin.user*')? 'active open' : ''}}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -83,7 +94,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="" class="menu-link">
+                    <a href="{{ route('admin.vendor.index') }}" class="menu-link">
                         <div data-i18n="Basic">Vendors</div>
                     </a>
                 </li>

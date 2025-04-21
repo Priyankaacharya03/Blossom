@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -21,10 +22,12 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products'));
     }
 
+
     public function create()
     {
         $categories = Category::all();
-        return view('admin.products.create', compact('categories'));
+        $subcategories = Subcategory::all();
+        return view('admin.products.create', compact('categories', 'subcategories'));
     }
     public function store(Request $request)
     {
@@ -58,7 +61,7 @@ class ProductController extends Controller
         $product->primary_image =  $request->file('image')->store('products', 'public');
         $product->is_feature = $request->is_feature;
         $product->description = $request->description;
-        // $product->vendor_id = Auth::id();
+        $product->vendor_id = Auth::id();
         // $product->vendor_id = "";
         $product->save();
 

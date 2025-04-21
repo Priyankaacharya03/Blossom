@@ -147,9 +147,9 @@
             <div class="col-lg-3 col-md-6 mb-4">
                 <h5>Customer Service</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-decoration-none">My Account</a></li>
+                    <li><a href="{{ route('user.profile') }}" class="text-decoration-none">My Account</a></li>
                     <li><a href="#" class="text-decoration-none">Order Tracking</a></li>
-                    <li><a href="#" class="text-decoration-none">Wishlist</a></li>
+                    <li><a href="{{ route('wishlist') }}" class="text-decoration-none">Wishlist</a></li>
                     <li><a href="#" class="text-decoration-none">Returns & Exchanges</a></li>
                 </ul>
             </div>

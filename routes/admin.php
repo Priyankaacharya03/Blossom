@@ -28,7 +28,6 @@ Route::prefix('admin')->as('admin.')->middleware(['admin'])->group(function () {
         Route::put('/update/{id}', [ProductController::class, 'update'])->name('update');
         Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('delete');
 
-
         Route::get('/images/{pid}', [ProductImageController::class, 'index'])->name('images.index');
         Route::post('/images/store/{pid}', [ProductImageController::class, 'store'])->name('images.store');
         Route::delete('/images/delete/{id}', [ProductImageController::class, 'delete'])->name('images.delete');
@@ -39,6 +38,8 @@ Route::prefix('admin')->as('admin.')->middleware(['admin'])->group(function () {
         Route::post('/store', [SubcategoryController::class, 'store'])->name('store');
         Route::put('/edit/{id}', [SubcategoryController::class, 'update'])->name('update');
         Route::delete('/delete/{id}', [SubcategoryController::class, 'delete'])->name('delete');
+        // AJAX endpoint to get subcategories by category
+        Route::get('/get-subcategories/{category_id}', [SubcategoryController::class, 'getSubcategories'])->name('subcategory.get');
     });
 
     Route::prefix('product-category')->as('product-category.')->group(function () {
@@ -61,6 +62,7 @@ Route::prefix('admin')->as('admin.')->middleware(['admin'])->group(function () {
         Route::get('/request', [VendorController::class, 'vendorRequest'])->name('request');
         Route::get('/request-details/{id}', [VendorController::class, 'vendorRequestDetails'])->name('request.details');
         Route::post('/request-handle/{id}', [VendorController::class, 'handleRequest'])->name('request.handle');
+        Route::get('/vendors', [VendorController::class, 'showVendors'])->name('index');
     });
 
     Route::prefix('carousel')->as('carousel.')->group(function () {

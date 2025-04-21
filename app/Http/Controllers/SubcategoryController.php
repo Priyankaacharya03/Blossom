@@ -8,14 +8,6 @@ use Illuminate\Http\Request;
 
 class SubcategoryController extends Controller
 {
-    // public function index()
-    // {
-    //     $subcategories = Subcategory::all();
-
-    //     return view('admin.products.product_subcategory', compact('subcategories'));
-    // }
-
-
     public function index()
     {
         // $subcategories = Subcategory::with(['category'])->get();
@@ -72,5 +64,14 @@ class SubcategoryController extends Controller
         $subcategory->delete();
         toastr()->success('Subcategory deleted successfully');
         return redirect()->route('admin.product-subcategory.index');
+    }
+
+
+
+
+    public function getSubcategories($category_id)
+    {
+        $subcategories = Subcategory::where('category_id', $category_id)->get();
+        return response()->json($subcategories);
     }
 }

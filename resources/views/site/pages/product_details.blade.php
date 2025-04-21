@@ -174,30 +174,6 @@
                 </button>
             </div>
 
-            <!-- Shipping Info -->
-            <div class="bg-light p-4 rounded mb-4">
-                <div class="d-flex align-items-start gap-3 mb-3">
-                    <i class="bi bi-truck text-secondary mt-1"></i>
-                    <div>
-                        <p class="small fw-medium text-dark">Free shipping</p>
-                        <p class="text-secondary" style="font-size: 0.75rem;">On orders over Rs. 1,000</p>
-                    </div>
-                </div>
-                <div class="d-flex align-items-start gap-3 mb-3">
-                    <i class="bi bi-arrow-counterclockwise text-secondary mt-1"></i>
-                    <div>
-                        <p class="small fw-medium text-dark">30-day returns</p>
-                        <p class="text-secondary" style="font-size: 0.75rem;">Hassle-free returns</p>
-                    </div>
-                </div>
-                <div class="d-flex align-items-start gap-3">
-                    <i class="bi bi-shield-check text-secondary mt-1"></i>
-                    <div>
-                        <p class="small fw-medium text-dark">Secure checkout</p>
-                        <p class="text-secondary" style="font-size: 0.75rem;">Safe & protected checkout</p>
-                    </div>
-                </div>
-            </div>
             @if ($product->vendor)
             <div>
                 <a href="{{ route('vendor.details',$product->vendor->id) }}">

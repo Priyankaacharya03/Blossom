@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Cart;
+use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades;
 use Illuminate\Support\ServiceProvider;
@@ -25,9 +26,13 @@ class AppServiceProvider extends ServiceProvider
     {
         Facades\View::composer('*', function (View $view) {
             $carts = Auth::check() ? Cart::where('user_id', Auth::id())->get() : null;
+            $wishlistCount = Auth::check() ? Wishlist::where('user_id', Auth::id())->count() : 0;
 
-            // Pass the carts variable to all views
-            $view->with('carts', $carts);
+            // Pass both carts and wishlistCount to all views
+            $view->with([
+                'carts' => $carts,
+                'wishlistCount' => $wishlistCount
+            ]);
         });
     }
 }

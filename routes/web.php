@@ -50,13 +50,14 @@ Route::middleware([AuthCheckMiddleware::class])->group(function () {
         Route::get('/order', [UserController::class, 'orders'])->name('order');
         Route::get('/order-details/{order_id}', [UserController::class, 'orderDetails'])->name('order.details');
     });
+
     Route::get('/order-confirm', [OrderController::class, 'orderConfirm'])->name('orde.confirmr');
 
-    Route::get('/search', [HomeController::class, 'search'])->name('search');
 
     Route::get('/wishlist', [HomeController::class, 'getWishlist'])->name('wishlist');
 
-    Route::get('/wishlist/{id}', [HomeController::class, 'getAddOnWhishlist'])->name('getAddOnWhishlist');
+    Route::post('/wishlist/{product}', [HomeController::class, 'toggle'])->name('wishlist.toggle');
+
 
 
 
@@ -67,6 +68,9 @@ Route::middleware([AuthCheckMiddleware::class])->group(function () {
 
     Route::get('/category/{id}', [CateoryController::class, 'showCategory'])->name('category.show');
 });
+
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+
 
 
 require __DIR__ . '/auth.php';

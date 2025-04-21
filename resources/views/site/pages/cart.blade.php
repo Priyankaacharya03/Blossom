@@ -338,7 +338,6 @@
         }
 
 
-
         // Initialize summary on page load
         updateSummary()
     })
