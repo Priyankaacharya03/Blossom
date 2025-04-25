@@ -160,7 +160,11 @@ class OrderController extends Controller
         // $shippingInfo = $order->shippingAddress;
 
         if ($user->role === "admin") {
-            return view('admin.orders.order_items', compact('order', 'orderItems', 'shippingInfo'));
+
+            $orderItems = OrderItem::with('product')
+                ->where('order_id', $orderId)->get();
+
+            return view('admin.orders.order_items', compact('orderItems'));
         } elseif ($user->role === "vendor") {
 
             // $vendorProducts = Product::where('vendor_id', $vendor->id)->pluck('id');

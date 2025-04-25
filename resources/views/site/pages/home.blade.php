@@ -576,7 +576,7 @@
             <div class="section-header">
                 <h2 class="section-title">Featured Products</h2>
             </div>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <div class="row justify-content-center row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                 @foreach ($featured_products->take(4) as $product)
                 <div class="col">
                     <div class="product-card">

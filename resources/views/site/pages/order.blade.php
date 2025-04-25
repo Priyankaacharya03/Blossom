@@ -224,7 +224,7 @@
                 <div class="store-icon">
                     <i class="fa-solid fa-store"></i>
                 </div>
-                <span class="store-name">Skin Essence</span>
+                <span class="store-name">Store Name</span>
             </div>
             <div>
                 <span class="status-badge status-{{ strtolower($order->status) }}">{{ $order->status }}</span>

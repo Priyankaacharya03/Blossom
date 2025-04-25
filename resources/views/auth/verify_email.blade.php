@@ -5,51 +5,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify OTP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
+        :root {
+            --rose-gold: #bd8c7d;
+            --rose-gold-dark: #a57868;
+            --rose-gold-light: #d5b0a0;
+            --grey-dark: #4a4a4a;
+            --grey: #808080;
         }
 
-        .container {
-            width: 100%;
-            max-width: 400px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
+        h2 {
+            color: var(--rose-gold);
         }
 
-        .input-group {
-            margin: 10px 0;
-            text-align: left;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            border: none;
+        .btn-rose-gold {
+            background-color: var(--rose-gold);
             color: white;
-            border-radius: 5px;
-            cursor: pointer;
+            border: none;
         }
 
-        button:hover {
-            background-color: #0056b3;
+        .btn-rose-gold:hover {
+            background-color: var(--rose-gold-dark);
+            color: white;
         }
 
         .error {
@@ -64,45 +43,55 @@
     </style>
 </head>
 
-<body>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
     <div class="container">
-        <h2>Verify Your Email</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow p-4">
+                    <h2 class="text-center mb-4">Verify Your Email</h2>
 
-        <!-- Success Message -->
-        @if (session('success'))
-        <p class="success">{{ session('success') }}</p>
-        @endif
+                    @if (session('success'))
+                    <p class="success text-center">{{ session('success') }}</p>
+                    @endif
 
-        <!-- Error Message -->
-        @if (session('error'))
-        <p class="error">{{ session('error') }}</p>
-        @endif
+                    @if (session('error'))
+                    <p class="error text-center">{{ session('error') }}</p>
+                    @endif
 
-        <!-- OTP Verification Form -->
-        <form action="{{ route('verify.otp') }}" method="POST">
-            @csrf
-            <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" value="{{ session('email') }}" readonly>
-                @error('email') <p class="error">{{ $message }}</p> @enderror
+                    <!-- OTP Verification Form -->
+                    <form action="{{ route('verify.otp') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" name="email" id="email" value="{{ session('email') }}" class="form-control" readonly>
+                            @error('email') <p class="error">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="otp" class="form-label">Enter OTP</label>
+                            <input type="text" name="otp" id="otp" class="form-control" required>
+                            @error('otp') <p class="error">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="d-grid mb-2">
+                            <button type="submit" class="btn btn-rose-gold">Verify OTP</button>
+                        </div>
+                    </form>
+
+                    <!-- Resend OTP -->
+                    <p class="text-center mt-3">Didn't receive the OTP?</p>
+                    <form action="{{ route('resend.otp') }}" method="POST">
+                        @csrf
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-outline-secondary">Resend OTP</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <div class="input-group">
-                <label for="otp">Enter OTP</label>
-                <input type="text" name="otp" id="otp" required>
-                @error('otp') <p class="error">{{ $message }}</p> @enderror
-            </div>
-
-            <button type="submit">Verify OTP</button>
-        </form>
-
-        <!-- Resend OTP Form -->
-        <p>Didn't receive the OTP? Request a new one:</p>
-        <form action="{{ route('resend.otp') }}" method="POST">
-            @csrf
-            <button type="submit">Resend OTP</button>
-        </form>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

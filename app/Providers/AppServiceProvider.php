@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Cart;
 use App\Models\Wishlist;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades;
 use Illuminate\Support\ServiceProvider;
@@ -34,5 +35,7 @@ class AppServiceProvider extends ServiceProvider
                 'wishlistCount' => $wishlistCount
             ]);
         });
+
+        Paginator::useBootstrapFive();
     }
 }

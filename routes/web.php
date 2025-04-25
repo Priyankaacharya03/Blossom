@@ -53,18 +53,12 @@ Route::middleware([AuthCheckMiddleware::class])->group(function () {
 
     Route::get('/order-confirm', [OrderController::class, 'orderConfirm'])->name('orde.confirmr');
 
-
     Route::get('/wishlist', [HomeController::class, 'getWishlist'])->name('wishlist');
 
     Route::post('/wishlist/{product}', [HomeController::class, 'toggle'])->name('wishlist.toggle');
 
 
-
-
-
     Route::get('/khati/return', [PaymentController::class, 'return']);
-
-
 
     Route::get('/category/{id}', [CateoryController::class, 'showCategory'])->name('category.show');
 });

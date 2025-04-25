@@ -59,10 +59,10 @@ class HomeController extends Controller
         return view('site.pages.wishlist', compact('wishlists'));
     }
 
-    public function toggle($tourId)
+    public function toggle($productId)
     {
         $user = auth()->user();
-        $exists = Wishlist::where('user_id', $user->id)->where('product_id', $tourId)->first();
+        $exists = Wishlist::where('user_id', $user->id)->where('product_id', $productId)->first();
 
         if ($exists) {
             $exists->delete();
@@ -71,7 +71,7 @@ class HomeController extends Controller
         } else {
             Wishlist::create([
                 'user_id' => $user->id,
-                'product_id' => $tourId
+                'product_id' => $productId
             ]);
             toastr()->success('Added to wishlist.');
             return back();

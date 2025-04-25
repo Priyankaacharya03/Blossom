@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ShippingAddress;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -97,19 +98,23 @@ class UserController extends Controller
 
     public function orders()
     {
-        $user_id = Auth::id(); // shortcut for Auth::user()->id
+        $user_id = Auth::id();
 
         // Get all orders for the logged-in user, with their related order items and products
+        // Add pagination for better performance with many orders
         $orders = Order::with(['orderItems.product'])
-        ->withCount('orderItems') // This will count the number of items in each order
-        ->where('user_id', $user_id)
-        ->latest()
-        ->get();
-    
-            // dd($orders);
+            ->withCount('orderItems')
+            ->where('user_id', $user_id)
+            ->latest()
+            ->paginate(5); // Show 5 orders per page
+
 
         return view('site.pages.order', compact('orders'));
     }
+
+    // Add this method to handle order cancellation
+
+
 
 
     public function orderDetails($order_id)

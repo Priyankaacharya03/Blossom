@@ -1,3 +1,122 @@
+<style>
+    /* Refined UI Styles */
+    body {
+        background-color: #f4f5f6;
+    }
+
+    /* Search bar style */
+    .search-container {
+        width: 300px;
+        display: flex;
+        position: relative;
+    }
+
+    .search-input {
+        border-radius: 4px 0 0 4px;
+        padding: 0.5rem;
+        border: 1px solid #e0e0e0;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        border-color: rgba(172, 172, 173, 0.5);
+        box-shadow: 0 0 5px rgba(172, 172, 173, 0.3);
+    }
+
+    /* Search and Add Product buttons */
+    .custom-btn {
+        background-color: #4a4a4a !important;
+        color: white !important;
+        border: 1px solid rgba(101, 101, 101, 0.3);
+        border-radius: 0 4px 4px 0;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .custom-btn:hover {
+        background-color: #4a4a4a;
+        color: white;
+        border-color: #4a4a4a;
+    }
+
+    .search-btn i {
+        font-size: 1rem;
+    }
+
+    /* Category dropdown */
+    .form-select {
+        border-color: #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .form-select:focus {
+        border-color: rgba(172, 172, 173, 0.5);
+        box-shadow: 0 0 5px rgba(172, 172, 173, 0.3);
+    }
+
+    /* Card and table styles */
+    .card {
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .table {
+        background-color: white;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        color: #4a4a4a;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(172, 172, 173, 0.05);
+    }
+
+    /* Pagination */
+    .pagination .page-link {
+        background-color: rgba(172, 172, 173, 0.1);
+        color: #333;
+        border: 1px solid rgba(172, 172, 173, 0.3);
+        margin: 0 0.25rem;
+        transition: all 0.3s ease;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #4a4a4a;
+        color: white;
+        border-color: #4a4a4a;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #4a4a4a;
+        color: white;
+        border-color: #4a4a4a;
+    }
+
+    /* Dropdown menu */
+    .dropdown-menu {
+        border: 1px solid rgba(172, 172, 173, 0.2);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .dropdown-item:hover {
+        background-color: rgba(172, 172, 173, 0.1);
+    }
+</style>
+
+
 @extends('vendor.layouts.main')
 
 @section('title', 'Product-index')
@@ -14,7 +133,7 @@
                     <input type="text" class="form-control search-input" name="search" placeholder="Search Products" aria-label="Search" />
                     <!-- Search Icon -->
                     <button class="btn search-btn" type="submit">
-                        <i class="bi bi-search"></i> <!-- Bootstrap search icon -->
+                        <i class="bi bi-search"></i>
                     </button>
                 </div>
             </form>
@@ -36,22 +155,18 @@
                             @endforeach
                         </select>
                     </form>
-
                 </div>
 
                 <!-- Add Product button -->
                 <a
                     name=""
                     id=""
-                    class="btn my-2"
+                    class="btn my-2 custom-btn"
                     href="{{ route('vendor.product.create') }}"
-                    role="button"
-                    style="background-color: #bd8c7d; color: white;">
+                    role="button">
                     + Add Product
                 </a>
             </div>
-
-
         </div>
     </div>
 
@@ -116,88 +231,10 @@
                         </table>
                     </div>
                 </div>
+                {{ $products->links() }}
             </div>
         </div>
     </div>
-
 </div>
 
-<!-- Add your CSS to improve UI -->
-<style>
-    /* Search bar style */
-    .search-container {
-        width: 300px;
-        display: flex;
-        position: relative;
-    }
-
-    .search-input {
-        border-radius: 4px;
-        padding: 0.5rem;
-        border: 1px solid #ddd;
-        width: 100%;
-    }
-
-    .search-input:focus {
-        border-color: #bd8c7d;
-        box-shadow: 0 0 5px rgba(189, 140, 125, 0.6);
-    }
-
-    /* Search button with icon */
-    .search-btn {
-        background-color: #bd8c7d;
-        color: white;
-        border: none;
-        padding: 0.6rem 1rem;
-        font-size: 1rem;
-        border-radius: 4px;
-        margin-left: 5px;
-        cursor: pointer;
-    }
-
-    .search-btn i {
-        font-size: 18px;
-    }
-
-    .search-btn:hover {
-        background-color: #a77966;
-        color: white;
-    }
-
-    /* Button style */
-    .btn {
-        background-color: #bd8c7d;
-        color: white;
-        border-radius: 5px;
-        font-weight: 600;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .btn:hover {
-        background-color: #a77966;
-        color: #fff;
-    }
-
-    .dropdown-menu {
-        border-radius: 8px;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Table style */
-    .table th,
-    .table td {
-        vertical-align: middle;
-    }
-
-    .table-responsive {
-        overflow-x: auto;
-    }
-
-    .card-header {
-        font-size: 1.25rem;
-        background-color: #f8f9fa;
-        font-weight: 600;
-        border-bottom: 2px solid #ddd;
-    }
-</style>
 @endsection

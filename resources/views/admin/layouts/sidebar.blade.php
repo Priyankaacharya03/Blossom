@@ -122,5 +122,12 @@
                 <div data-i18n="Analytics">Carousels</div>
             </a>
         </li>
+
+        <li class="menu-item {{ request()->routeIs('admin.setting') ? 'active':'' }}">
+            <a href="{{ route('admin.setting') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Setting</div>
+            </a>
+        </li>
     </ul>
 </aside>

@@ -54,28 +54,28 @@ class AuthController extends Controller
 
         // return $req->all(); //return all the values in the form submitted by user
 
-        // $user_type = UserType::create(['role' => 'customer']);
-
-        // $user = User::create([
-        //     'name' => $req->name,
-        //     'email' => $req->email,
-        //     'gender' => $req->gender,
-        //     'password' => $req->password,
-        //     'user_type_id' => $user_type->id,
-        // ]);
-
         $otp = rand(100000, 999999); // Generate OTP
         $expiresAt = Carbon::now()->addMinutes(5); // OTP expires in 5 minutes
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'customer',
-            'otp' => $otp,
-            'otp_expires_at' => $expiresAt,
+        // $user = User::create([
+        //     'name' => $request->name,
+        //     'email' => $request->email,
+        //     'password' => Hash::make($request->password),
+        //     'role' => 'customer',
+        //     'otp' => $otp,
+        //     'otp_expires_at' => $expiresAt,
 
-        ]);
+        // ]);
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->role = 'user';
+        $user->otp = $otp;
+        $user->otp_expires_at = $expiresAt;
+        $user->save();
+
 
         $this->sendOTP($user);
 
@@ -83,9 +83,6 @@ class AuthController extends Controller
         toastr()->success('OTP sent to your email.');
         return redirect()->route('verify.form');
 
-        // ->with('success', 'OTP sent to your email.');
-
-        // event(new Registered($user));
 
         toastr()->success('Your account has been registered.');
 
@@ -125,7 +122,10 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || $user->otp !== $request->otp) {
-            return back()->withErrors(['otp' => 'Invalid OTP.']);
+            // return back()->withErrors(['otp' => 'Invalid OTP.']);
+
+            toastr()->error('Invalid OTP.');
+            return back();
         }
 
         if (Carbon::now()->greaterThan($user->otp_expires_at)) {
@@ -139,7 +139,8 @@ class AuthController extends Controller
             'otp_attempts' => 0, // Reset attempts
         ]);
 
-        return redirect()->route('login')->with('success', 'Email verified. Please login.');
+        toastr()->success('Email verified. Please login.');
+        return redirect()->route('login');
     }
 
     // Resend OTP
@@ -150,16 +151,22 @@ class AuthController extends Controller
         $user = User::where('email', $email)->first();
 
         if (!$user) {
-            return back()->withErrors(['email' => 'User not found.']);
+            toastr()->error('User not found.');
+            return back();
+            // return back()->withErrors(['email' => 'User not found.']);
         }
 
         if ($user->is_verified) {
-            return back()->withErrors(['email' => 'Email already verified.']);
+            toastr()->error('Email already verified.');
+            return back();
+            // return back()->withErrors(['email' => 'Email already verified.']);
         }
 
         // Limit OTP resend to 3 attempts
         if ($user->otp_attempts >= 3) {
-            return back()->withErrors(['otp' => 'Too many OTP requests. Please try again later.']);
+            toastr()->error('Too many OTP requests. Please try again later.');
+            return back();
+            // return back()->withErrors(['otp' => 'Too many OTP requests. Please try again later.']);
         }
 
         $otp = rand(100000, 999999);
@@ -173,6 +180,7 @@ class AuthController extends Controller
 
         $this->sendOTP($user);
 
-        return back()->with('success', 'New OTP sent to your email.');
+        toastr()->success('New OTP sent to your email.');
+        return back();
     }
 }

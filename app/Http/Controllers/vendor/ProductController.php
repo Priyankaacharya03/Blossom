@@ -26,15 +26,16 @@ class ProductController extends Controller
 
         if ($search) {
             // If search query exists, filter products by name
-            $products = Product::where('product_name', 'like', '%' . $search . '%')->where('vendor_id', $vendor->id)
-                ->with(['category'])
-                ->get();
+            $query = Product::where('product_name', 'like', '%' . $search . '%')->where('vendor_id', $vendor->id)
+                ->with(['category']);
         } elseif ($filter) {
-            $products = Product::where('category_id', $filter)->where('vendor_id', $vendor->id)->get();
+            $query = Product::where('category_id', $filter)->where('vendor_id', $vendor->id);
         } else {
             // If no search query, get all products
-            $products = Product::with(['category'])->where('vendor_id', $vendor->id)->get();
+            $query = Product::with(['category'])->where('vendor_id', $vendor->id);
         }
+
+        $products = $query->paginate(2);
 
         return view('vendor.products.index', compact('products', 'categories'));
     }

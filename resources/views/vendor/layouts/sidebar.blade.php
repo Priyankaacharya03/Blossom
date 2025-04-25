@@ -1,75 +1,21 @@
-<!-- Sidebar Overlay (Mobile) -->
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-<!-- Sidebar -->
-<nav class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-        <h4 class="m-0">Blossom</h4>
-        <button class="sidebar-toggle ms-auto d-lg-none" id="closeSidebar">
-            <i class="bi bi-x-lg"></i>
-        </button>
-    </div>
-
-    <div class="sidebar-menu">
-        <!-- Dashboard -->
-        <div class="sidebar-item">
-            <a href="{{ route('vendor.dashboard') }}" class="sidebar-link {{ request()->routeIs('vendor.dashboard') ? 'active' : '' }}">
-                <i class="bi bi-house-door"></i>
-                <span class="link-text">Dashboard</span>
-            </a>
-        </div>
-
-        <!-- Products -->
-        <div class="sidebar-item">
-            <a href="#productsMenu" class="sidebar-link {{ request()->routeIs('vendor.product*') ? 'active' : '' }}"
-                data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->routeIs('vendor.product*') ? 'true' : 'false' }}">
-                <i class="bi bi-box"></i>
-                <span class="link-text">Products</span>
-                <i class="bi bi-chevron-down ms-auto toggle-icon"></i>
-            </a>
-            <div class="submenu collapse {{ request()->routeIs('vendor.product*') ? 'show' : '' }}" id="productsMenu">
-                <a href="{{ route('vendor.product.index') }}" class="sidebar-link {{ request()->routeIs('vendor.product.index') ? 'active' : '' }}">
-                    Product List
-                </a>
-                <a href="{{ route('vendor.product.create') }}" class="sidebar-link {{ request()->routeIs('vendor.product.create') ? 'active' : '' }}">
-                    Add Product
-                </a>
-            </div>
-        </div>
-
-
-        <!-- Orders -->
-        <div class="sidebar-item">
-            <a href="{{ route('vendor.order.index') }}" class="sidebar-link {{ request()->routeIs('vendor.order*') ? 'active' : '' }}">
-                <i class="bi bi-cart"></i>
-                <span class="link-text">Orders</span>
-            </a>
-        </div>
-
-        <!-- Home -->
-        <div class="sidebar-item">
-            <a href="{{ route('index') }}" class="sidebar-link {{ request()->routeIs('index') ? 'active' : '' }}">
-                <i class="bi bi-house"></i>
-                <span class="link-text">Home</span>
-            </a>
-        </div>
-    </div>
-</nav>
-
 <style>
     :root {
-        --sidebar-bg: rgb(101, 101, 101);
-        --sidebar-hover: rgba(255, 255, 255, 0.1);
-        --sidebar-active: rgba(255, 255, 255, 0.2);
+        --sidebar-bg: rgb(255, 255, 255);
+        --sidebar-hover: rgba(0, 0, 0, 0.05);
+        --sidebar-active: rgba(172, 172, 173, 0.1);
+        --sidebar-active-color: #4a4a4a;
         --sidebar-width: 250px;
         --sidebar-collapsed-width: 70px;
         --header-height: 60px;
+        --sidebar-text: #5a5a5a;
+        --sidebar-icon: #6c757d;
+        --sidebar-border: rgba(0, 0, 0, 0.05);
     }
 
     /* Sidebar Styles */
     .sidebar {
         background-color: var(--sidebar-bg);
-        color: white;
+        color: var(--sidebar-text);
         width: var(--sidebar-width);
         height: 100vh;
         position: fixed;
@@ -78,7 +24,8 @@
         z-index: 1030;
         transition: all 0.3s ease;
         overflow-y: auto;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        border-right: 1px solid var(--sidebar-border);
     }
 
     .sidebar.collapsed {
@@ -90,12 +37,15 @@
         display: flex;
         align-items: center;
         padding: 0 1.5rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid var(--sidebar-border);
+        background-color: white;
     }
 
     .sidebar-brand h4 {
         transition: opacity 0.3s;
         white-space: nowrap;
+        color: #333;
+        font-weight: 600;
     }
 
     .sidebar.collapsed .sidebar-brand h4 {
@@ -108,26 +58,29 @@
 
     .sidebar-item {
         position: relative;
+        margin-bottom: 0.25rem;
     }
 
     .sidebar-link {
         display: flex;
         align-items: center;
         padding: 0.75rem 1.5rem;
-        color: rgba(255, 255, 255, 0.8);
+        color: var(--sidebar-text);
         text-decoration: none;
-        transition: all 0.3s;
+        transition: all 0.15s ease;
         white-space: nowrap;
+        border-radius: 0.25rem;
+        margin: 0 0.5rem;
     }
 
     .sidebar-link:hover {
         background-color: var(--sidebar-hover);
-        color: white;
+        color: #333;
     }
 
     .sidebar-link.active {
-        /* background-color: var(--sidebar-active); */
-        color: white;
+        background-color: var(--sidebar-active);
+        color: var(--sidebar-active-color);
         font-weight: 500;
     }
 
@@ -136,6 +89,11 @@
         font-size: 1.1rem;
         width: 1.5rem;
         text-align: center;
+        color: var(--sidebar-icon);
+    }
+
+    .sidebar-link.active i {
+        color: var(--sidebar-active-color);
     }
 
     .sidebar-link .link-text {
@@ -162,6 +120,16 @@
     .submenu .sidebar-link {
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+
+    /* Toggle icon animation */
+    .toggle-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar-link[aria-expanded="true"] .toggle-icon {
+        transform: rotate(180deg);
     }
 
     /* Overlay for mobile */
@@ -226,10 +194,69 @@
     }
 </style>
 
+
+<!-- Sidebar Overlay (Mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <h4 class="m-0">Blossom</h4>
+        <button class="sidebar-toggle ms-auto d-lg-none" id="closeSidebar">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <div class="sidebar-menu">
+        <!-- Dashboard -->
+        <div class="sidebar-item">
+            <a href="{{ route('vendor.dashboard') }}" class="sidebar-link {{ request()->routeIs('vendor.dashboard') ? 'active' : '' }}">
+                <i class="bi bi-house-door"></i>
+                <span class="link-text">Dashboard</span>
+            </a>
+        </div>
+
+        <!-- Products -->
+        <div class="sidebar-item">
+            <a href="#productsMenu" class="sidebar-link {{ request()->routeIs('vendor.product*') ? 'active' : '' }}"
+                data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->routeIs('vendor.product*') ? 'true' : 'false' }}">
+                <i class="bi bi-box"></i>
+                <span class="link-text">Products</span>
+                <i class="bi bi-chevron-down ms-auto toggle-icon"></i>
+            </a>
+            <div class="submenu collapse {{ request()->routeIs('vendor.product*') ? 'show' : '' }}" id="productsMenu">
+                <a href="{{ route('vendor.product.index') }}" class="sidebar-link {{ request()->routeIs('vendor.product.index') ? 'active' : '' }}">
+                    Product List
+                </a>
+                <a href="{{ route('vendor.product.create') }}" class="sidebar-link {{ request()->routeIs('vendor.product.create') ? 'active' : '' }}">
+                    Add Product
+                </a>
+            </div>
+        </div>
+
+        <!-- Orders -->
+        <div class="sidebar-item">
+            <a href="{{ route('vendor.order.index') }}" class="sidebar-link {{ request()->routeIs('vendor.order*') ? 'active' : '' }}">
+                <i class="bi bi-cart"></i>
+                <span class="link-text">Orders</span>
+            </a>
+        </div>
+
+
+        <!-- Home -->
+        <div class="sidebar-item">
+            <a href="{{ route('index') }}" class="sidebar-link {{ request()->routeIs('index') ? 'active' : '' }}">
+                <i class="bi bi-house"></i>
+                <span class="link-text">Home</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.querySelector('.navbar .btn');
+        const sidebarToggle = document.querySelector('.navbar .sidebar-toggle');
         const closeSidebar = document.getElementById('closeSidebar');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
         const body = document.body;
@@ -265,6 +292,10 @@
         window.toggleSidebar = toggleSidebar;
 
         // Event listeners
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', toggleSidebar);
+        }
+
         if (closeSidebar) {
             closeSidebar.addEventListener('click', function() {
                 sidebar.classList.remove('show');
@@ -278,6 +309,21 @@
                 sidebarOverlay.classList.remove('show');
             });
         }
+
+        // Setup collapsible menus
+        const collapsibleLinks = document.querySelectorAll('.sidebar-link[data-bs-toggle="collapse"]');
+        collapsibleLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (isMobile()) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.classList.toggle('show');
+                        this.setAttribute('aria-expanded', target.classList.contains('show'));
+                    }
+                }
+            });
+        });
 
         // Handle window resize
         window.addEventListener('resize', function() {

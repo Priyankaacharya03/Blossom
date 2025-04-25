@@ -6,7 +6,7 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4">
         <a href="{{ route('admin.order.index') }}" class="btn btn-sm btn-secondary">← Back to Orders</a>
-        <span class="text-muted fw-light ms-3">Order #{{ $order->id }} Items</span>
+
     </h4>
 
     <div class="card">
@@ -25,7 +25,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($order->orderItems as $orderItem)
+                    @foreach ($orderItems as $orderItem)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $orderItem->product->product_name ?? 'N/A' }}</td>

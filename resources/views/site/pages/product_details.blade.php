@@ -17,6 +17,7 @@
     .thumbnail-btn {
         border: 2px solid #e5e5e5;
         transition: all 0.3s ease;
+        cursor: pointer;
     }
 
     .thumbnail-btn.active {
@@ -67,6 +68,29 @@
         width: fit-content;
     }
 
+    /* Reviews section */
+    .review-item {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .review-item:last-child {
+        border-bottom: none;
+    }
+
+    .review-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .review-time {
+        font-size: 0.8rem;
+        color: var(--grey);
+    }
+
     /* For mobile view */
     @media (max-width: 767px) {
         .md-flex-row {
@@ -94,13 +118,31 @@
     <div class="row mb-5">
         <div class="col-lg-6 position-relative">
             <div class="d-flex flex-column-reverse md-flex-row gap-4">
+                <!-- Thumbnails -->
+                <div class="d-flex flex-row md-flex-column gap-2 mb-3 md-mb-0">
+                    <div class="thumbnail-btn active" data-image="{{ asset('storage/' . $product->primary_image) }}">
+                        <img src="{{ asset('storage/' . $product->primary_image) }}"
+                            alt="Thumbnail"
+                            class="object-cover"
+                            style="height: 125px; width: 125px;">
+                    </div>
+                    @foreach($productImages->take(3) as $image)
+                    <div class="thumbnail-btn" data-image=" {{ asset('storage/' . $image->product_image) }}">
+                        <img src="{{ asset('storage/' . $image->product_image) }}"
+                            alt="Thumbnail"
+                            class=" aspect-ratio-1 object-cover" style="height: 125px; width: 125px;">
+                    </div>
+                    @endforeach
+
+                </div>
+
                 <!-- Main Image -->
-                <div class="flex-grow position-relative rounded-lg overflow-hidden bg-light">
+                <div class=" flex-grow position-relative rounded-lg overflow-hidden bg-light" style="min-height: 100vh;">
                     <img src="{{ asset('storage/' . $product->primary_image) }}"
                         alt="{{ $product->product_name }}"
                         id="main-product-image"
                         class="w-100 h-100 object-contain md-object-cover"
-                        style="aspect-ratio: 1/1;">
+                        style="aspect-ratio: 1/0.9;">
                 </div>
             </div>
         </div>
@@ -163,27 +205,78 @@
 
                 <form action="{{ route('cart.addToCart',$product->id) }}" method="post">
                     @csrf
+                    <input type="hidden" name="quantity" id="cart-quantity" value="1">
                     <button id="add-to-cart" type="submit" class="btn flex-grow-1 text-white d-flex align-items-center justify-content-center"
                         style="background-color: #bd8c7d;" {{ $product->stock <= 0 ? 'disabled' : '' }}>
                         <i class="bi bi-cart me-2"></i> Add to Cart
                     </button>
                 </form>
 
+                <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="wishlist-icon btn btn-outline-secondary px-3">
+                        <i class="bi bi-heart{{ Auth::user()->wishlists->contains('product_id', $product->id) ? '-fill' : '' }}"></i>
+                    </button>
+                </form>
+                <!-- 
                 <button type="button" class="btn btn-outline-secondary px-3">
                     <i class="bi bi-heart"></i>
-                </button>
+                </button> -->
             </div>
 
             @if ($product->vendor)
-            <div>
-                <a href="{{ route('vendor.details',$product->vendor->id) }}">
-                    {{ $product->vendor->vendor_name }}
+            <div class="mb-4">
+                <a href="{{ route('vendor.details',$product->vendor->id) }}" class="text-decoration-none" style="color: var(--rose-gold);">
+                    <i class="bi bi-shop me-1"></i> {{ $product->vendor->vendor_name }}
                 </a>
             </div>
             @endif
 
+            <!-- Reviews Section -->
+            <div class="mt-2">
+                <h3 class="fs-5 fw-semibold mb-3">Customer Reviews</h3>
 
+                <div class="reviews-container">
+                    @if(isset($reviews) && count($reviews) > 0)
+                    @foreach($reviews as $review)
+                    <div class="review-item">
+                        <div class="d-flex gap-3">
+                            <img src="{{ $review->user->profile_image ? asset('storage/' . $review->user->profile_image) : asset('images/default-avatar.png') }}"
+                                alt="User" class="review-avatar">
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h4 class="fs-6 fw-medium mb-0">{{ $review->user->name }}</h4>
+                                    <span class="review-time">{{ $review->created_at->diffForHumans() }}</span>
+                                </div>
+                                <p class="mb-0 mt-2">{{ $review->comment }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                    @else
+                    <p class="text-secondary">No reviews yet. Be the first to review this product!</p>
+                    @endif
+                </div>
 
+                @auth
+                <div class="mt-4">
+                    <form action="" method="POST" class="border rounded p-3">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Write a review</label>
+                            <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn text-white" style="background-color: var(--rose-gold);">
+                            Submit Review
+                        </button>
+                    </form>
+                </div>
+                @else
+                <div class="mt-4">
+                    <a href="{{ route('login') }}" class="btn btn-outline-secondary">Login to write a review</a>
+                </div>
+                @endauth
+            </div>
         </div>
     </div>
 
@@ -288,35 +381,47 @@
         const decreaseBtn = document.getElementById('decrease-qty');
         const increaseBtn = document.getElementById('increase-qty');
         const quantitySpan = document.getElementById('quantity');
-        const maxStock = {
-            {
-                $product - > stock
-            }
-        };
+        const cartQuantityInput = document.getElementById('cart-quantity');
+        // const maxStock = {
+        //     {
+        //         $product - > stock
+        //     }
+        // };
 
         decreaseBtn.addEventListener('click', function() {
             let currentQty = parseInt(quantitySpan.textContent);
             if (currentQty > 1) {
-                quantitySpan.textContent = currentQty - 1;
+                currentQty -= 1;
+                quantitySpan.textContent = currentQty;
+                cartQuantityInput.value = currentQty;
             }
         });
 
         increaseBtn.addEventListener('click', function() {
             let currentQty = parseInt(quantitySpan.textContent);
             if (currentQty < maxStock) {
-                quantitySpan.textContent = currentQty + 1;
+                currentQty += 1;
+                quantitySpan.textContent = currentQty;
+                cartQuantityInput.value = currentQty;
             }
         });
 
-        // Add to Cart Button
-        const addToCartBtn = document.getElementById('add-to-cart');
+        // Image thumbnails
+        const thumbnails = document.querySelectorAll('.thumbnail-btn');
+        const mainImage = document.getElementById('main-product-image');
 
-        addToCartBtn.addEventListener('click', function() {
-            const quantity = parseInt(quantitySpan.textContent);
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function() {
+                // Remove active class from all thumbnails
+                thumbnails.forEach(t => t.classList.remove('active'));
 
-            // Here you would normally send this data to your backend
-            // For now, we'll just show an alert
-            alert(`Added to cart: ${quantity} x {{ $product->product_name }}`);
+                // Add active class to clicked thumbnail
+                this.classList.add('active');
+
+                // Update main image
+                const imageUrl = this.getAttribute('data-image');
+                mainImage.src = imageUrl;
+            });
         });
     });
 </script>

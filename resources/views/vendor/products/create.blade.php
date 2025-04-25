@@ -73,23 +73,33 @@
                             </div>
 
 
-                            <div class="mb-3">
-                                <label for="category_id" class="form-label">
-                                    <span class="text-danger">*</span> <span class="text-capitalize">Category</span>
-                                </label>
-                                <select class="form-control" name="category_id" id="category_id">
-                                    <option value="" selected>Select a Category</option>
-                                    @foreach ($categories as $category)
-                                    <!-- <option value="{{ $category->id }}" {{ old('category_id', $selectedCategory ?? '') == $category->id ? 'selected' : '' }}>
-                                        {{ $category->category_name }}
-                                    </option> -->
-                                    <option value="{{ $category->id }}" @selected($category->id == old('category_id'))>{{ $category->category_name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('category_id')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="category_id" class="form-label"><span class="text-danger">*</span> Category</label>
+                                    <select name="category_id" id="category_id" class="form-select">
+                                        <option value="">Select Category</option>
+                                        @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('category_id')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="subcategory_id" class="form-label"><span class="text-danger">*</span> Subcategory</label>
+                                    <select name="subcategory_id" id="subcategory_id" class="form-select">
+                                        <option value="">Select Subcategory</option>
+                                        {{-- Options will be loaded dynamically --}}
+                                    </select>
+                                    @error('subcategory_id')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                             </div>
+
 
                             <div class="mb-3">
                                 <label for="image" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> Primary Image</span></label>

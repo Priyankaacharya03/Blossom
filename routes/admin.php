@@ -77,4 +77,14 @@ Route::prefix('admin')->as('admin.')->middleware(['admin'])->group(function () {
         Route::get('/items/{id}', [OrderController::class, 'getOrderItems'])->name('items');
         Route::post('/status/{id}', [OrderController::class, 'updateStatus'])->name('update.status');
     });
+
+
+    Route::get('/profile', [HomeController::class, 'profile'])->name('profile');
+    Route::get('/profile-edit', [HomeController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile-update', [HomeController::class, 'update'])->name('profile.update');
+
+    Route::get('/change-password', [HomeController::class, 'showChangePasswordForm'])->name('password.change');
+    Route::post('/change-password', [HomeController::class, 'changePassword'])->name('password.update');
+
+    Route::get('/setting', [HomeController::class, 'setting'])->name('setting');
 });

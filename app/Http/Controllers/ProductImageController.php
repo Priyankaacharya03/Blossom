@@ -22,7 +22,7 @@ class ProductImageController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'images.*' => 'required|image|mimes:jpg,jpeg,png|max:3000',
+            'images.*' => 'required|image|mimes:jpg,jpeg,png|max:5024',
         ]);
 
         // dd($request->all());
@@ -39,8 +39,8 @@ class ProductImageController extends Controller
             }
         }
 
-        return redirect()->route('admin.product.images.index', ['pid' => $request->product_id])
-            ->with('success', 'Product gallery images added successfully!');
+        toastr()->success('Product images added successfully!');
+        return redirect()->route('admin.product.images.index', ['pid' => $request->product_id]);
     }
 
     public function delete($id)
@@ -54,6 +54,7 @@ class ProductImageController extends Controller
 
         $gallery->delete(); // Remove from database
 
-        return redirect()->back()->with('success', 'Image deleted successfully.');
+        toastr()->success('Image deleted successfully');
+        return redirect()->back();
     }
 }
