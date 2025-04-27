@@ -16,22 +16,17 @@ class OrderController extends Controller
     {
         $user = Auth::user();
 
-
-        // $vendor = Vendor::where('user_id', $user->id)->first();
-
-
+        $vendor = Vendor::where('user_id', $user->id)->first();
 
         //  dd($user);
 
         if ($user->role == 'vendor') {
 
-            $orderIds = OrderItem::where('vendor_id', Auth::user()->id)
+            $orderIds = OrderItem::where('vendor_id', $vendor->id)
                 ->pluck('order_id')
                 ->unique()
                 ->values()
                 ->toArray();
-
-
 
             //dd($totalAmount);
 
@@ -44,7 +39,7 @@ class OrderController extends Controller
             foreach ($orders as $order) {
 
                 //dd($order);
-                $orderDetails = OrderItem::where('vendor_id', Auth::user()->id)
+                $orderDetails = OrderItem::where('vendor_id', $vendor->id)
                     ->where('order_id', $order->id)->get();
 
                 //dd($orderDetails);
@@ -57,8 +52,7 @@ class OrderController extends Controller
                     //dd($order_cost);
                 }
 
-
-                $totalItem = OrderItem::where('vendor_id', Auth::user()->id)
+                $totalItem = OrderItem::where('vendor_id', $vendor->id)
                     ->where('order_id', $order->id)->count();
 
                 //dd($order->id);
@@ -84,14 +78,11 @@ class OrderController extends Controller
             return view('admin.orders.index', compact('orders'));
         } elseif ($user->role === "vendor") {
 
-            $vendorProducts = Product::where('vendor_id', Auth::user()->id)->pluck('id');
+            $vendorProducts = Product::where('vendor_id', $vendor->id)->pluck('id');
 
             // $orders = $orders->whereHas('orderItems', function ($query) use ($vendorProducts) {
             //     $query->whereIn('product_id', $vendorProducts);
             // })->with('orderItems.product')->latest()->get();
-
-
-
 
             return view('vendor.orders.index', compact('orders'));
         }
@@ -102,86 +93,37 @@ class OrderController extends Controller
 
     public function getOrderItems($id)
     {
-        // dd($id);
-
         $user = Auth::user();
-        //$customer_id = $id;
-        // dd($user->id);
-
         $orderId = $id;
 
+        // Start the query to fetch the order items based on the order_id
+        $orderItemsQuery = OrderItem::with('product')->where('order_id', $orderId);
 
-        // dd($user)
-        // dd($user->id);
-        $orderItems = OrderItem::with('product')->where('vendor_id', Auth::user()->id)
-            ->where('order_id', $orderId)->get();
+        // If the user is a vendor, filter by the vendor_id
+        if ($user->role === "vendor") {
+            $vendor = Vendor::where('user_id', $user->id)->first();
+            $orderItemsQuery->where('vendor_id', $vendor->id);
+        }
 
+        // Execute the query to get the order items
+        $orderItems = $orderItemsQuery->get();
 
-        // dd($orderItems);
-        // dd($orderItems);
-
-
-
-        // $vendor = Vendor::where('user_id', Auth::user()->id)->first();
-
-        // $orderIds = Order::where('user_id', $id)->pluck('id')->toArray();
-
-        // // $vendorOrderId = OrderItem::whereIn('order_id', $orderIds)
-
-        // $orderItems = OrderItem::with('product')->whereIn('order_id', $orderIds)
-        //     ->where('vendor_id', $vendor->id)->get();
-
-        // dd($orderItems);
-
-        // $productIds = Product::where('vendor_id', $vendor->id)->pluck('id')->toArray();
-
-        // $orderIds = OrderItem::whereIn('product_id', $productIds)
-        //     ->pluck('id')->toArray();
-
-        // $orderIds = Order::whereIn('id', $orderIds)->where('user_id', $customer_id)->pluck('id')->toArray();
-
-        // $uproductIds = OrderItem::wherein('order_id', $orderIds)->pluck('product_id')->toArray();
-        // // $orderItems = 
-        // // dd($uproductIds);
-        // $productDetails = Product::whereIn('id', $uproductIds)->get();
-
-
-        // $orderDetails = [
-        //     ''
-        // ]
-
-        //dd($productDetails);    
-
-
-        // $order = Order::with(['shippingAddress'])->whereIn('id', $productIds)->get();
-
-        //        dd($order);
-        // $orderItems = $orderItems;
-        // $shippingInfo = $order->shippingAddress;
-
+        // Return the appropriate view based on user role
         if ($user->role === "admin") {
-
-            $orderItems = OrderItem::with('product')
-                ->where('order_id', $orderId)->get();
-
             return view('admin.orders.order_items', compact('orderItems'));
         } elseif ($user->role === "vendor") {
-
-            // $vendorProducts = Product::where('vendor_id', $vendor->id)->pluck('id');
-            // $orderItems = $orderItems->filter(function ($item) use ($vendorProducts) {
-            //     return $vendorProducts->contains($item->product_id);
-            // });
-            // if ($orderItems->isEmpty()) {
-            //     return redirect()->back()->with('error', 'No items found for your vendor products.');
-            // }
-
             return view('vendor.orders.order_items', compact('orderItems'));
         }
 
+        // Unauthorized access for other roles
         return redirect()->back()->with('error', 'Unauthorized access.');
     }
+
+
+
     public function updateStatus(Request $request, $id)
     {
+
         $request->validate([
             'status' => 'required|in:pending,confirmed,processed,shipped,delivered,cancelled',
         ]);

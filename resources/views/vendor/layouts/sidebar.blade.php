@@ -250,6 +250,15 @@
                 <span class="link-text">Home</span>
             </a>
         </div>
+
+        <!-- Edit Profile -->
+        <div class="sidebar-item">
+            <a href="" class="sidebar-link {{ request()->routeIs('index') ? 'active' : '' }}">
+                <i class="bi bi-house"></i>
+                <span class="link-text">Edit Profile</span>
+            </a>
+        </div>
+
     </div>
 </nav>
 

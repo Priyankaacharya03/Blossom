@@ -22,7 +22,7 @@
                     @error('images.*')
                     <div class="text-danger">{{ $message }}</div>
                     @enderror
-                </div>
+                </div
                 <button type="submit" class="btn btn-primary">Upload Images</button>
             </form>
         </div>

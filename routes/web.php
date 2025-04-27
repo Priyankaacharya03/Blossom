@@ -31,7 +31,7 @@ Route::middleware([AuthCheckMiddleware::class])->group(function () {
     Route::prefix('cart')->as('cart.')->group(function () {
         Route::get('/', [CartController::class, 'getCarts'])->name('getCarts');
         Route::post('/store/{pid}/{quantity?}', [CartController::class, 'addToCart'])->name('addToCart');
-        Route::put('/cart/update/{id}', [CartController::class, 'updateCart'])->name('update');
+        Route::post('/update/{id}', [CartController::class, 'update'])->name('update');
         Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
         Route::post('/checkout/store', [CartController::class, 'storeCheckout'])->name('store.checkout');
         Route::delete('/delete/{id}', [CartController::class, 'delete'])->name('delete');

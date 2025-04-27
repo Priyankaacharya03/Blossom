@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductImageController;
+use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\Vendor\HomeController;
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\CategoryController;
@@ -41,10 +42,13 @@ Route::middleware([AuthCheckMiddleware::class])->group(function () {
             Route::delete('/images/delete/{id}', [ProductImageController::class, 'delete'])->name('images.delete');
         });
 
+        Route::get('/get-subcategories/{category_id}', [SubcategoryController::class, 'getSubcategories'])->name('subcategory.get');
+
 
         Route::prefix('order')->as('order.')->group(function () {
             Route::get('/', [OrderController::class, 'index'])->name('index');
             Route::get('/items/{id}', [OrderController::class, 'getOrderItems'])->name('items');
+            Route::post('/update-status/{id}', [OrderController::class, 'updateStatus'])->name('update.status');
         });
 
         Route::get('/details/{id}', [VendorController::class, 'getVendorDetails'])->name('details');

@@ -3,6 +3,7 @@
 @section('title', 'Order-index')
 
 @section('main-content')
+
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4">
         <span class="text-muted fw-light">Dashboard / Order /</span> Index
@@ -54,52 +55,56 @@
                                     <td>{{ $order->created_at->format('Y-m-d') }}</td>
                                     <td>{{ $order->totalItem }}</td>
                                     <td>
-                                        <div class="dropdown">
+                                        <div class="dropdown dropstart">
                                             <i class="bi bi-three-dots" data-bs-toggle="dropdown" role="button" style="cursor: pointer;" aria-expanded="false"></i>
                                             <div class="dropdown-menu">
 
                                                 <a class="dropdown-item" href="{{ route('vendor.order.items',$order->id) }}">View Items</a>
 
                                                 <!-- Trigger Button -->
-                                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeOrderStatus{{ $order->id }}">
+                                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeStatus{{ $order->id }}">
                                                     Change Status
                                                 </button>
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="changeOrderStatus{{ $order->id }}" tabindex="-1" aria-labelledby="changeOrderStatusLabel{{ $order->id }}" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <form action="{{ route('admin.order.update.status', $order->id) }}" method="POST">
-                                                                @csrf
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="changeOrderStatusLabel{{ $order->id }}">Update Order Status</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-
-                                                                <div class="modal-body">
-                                                                    <div class="mb-3">
-                                                                        <label for="status{{ $order->id }}" class="form-label">Status</label>
-                                                                        <select class="form-control" name="status" id="status{{ $order->id }}">
-                                                                            <option value="active" selected>Accept</option>
-                                                                            <option value="rejected">Reject</option>
-                                                                        </select>
-                                                                        @error('status')
-                                                                        <small class="form-text text-danger">{{ $message }}</small>
-                                                                        @enderror
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-primary">Update Status</button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
                                             </div>
                                         </div>
                                     </td>
+                                    <!-- Modal -->
+
+                                    <div class="modal fade" id="changeStatus{{ $order->id }}" tabindex="-1" aria-labelledby="changeStatus{{ $order->id }}Label" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form action="{{ route('vendor.order.update.status', $order->id) }}" method="POST">
+                                                    @csrf
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="changeOrderStatusLabel{{ $order->id }}">Update Order Status</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label for="status{{ $order->id }}" class="form-label">Status</label>
+                                                            <select class="form-control" name="status" id="status{{ $order->id }}">
+                                                                <option value="active" selected>confirmed</option>
+                                                                <option value="processed">Processed</option>
+                                                                <option value="shipped">Shipped</option>
+                                                                <option value="delivered">Delivered</option>
+                                                                <option value="cancelled">Cancelled</option>
+                                                            </select>
+                                                            @error('status')
+                                                            <small class="form-text text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Update Status</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </tr>
                                 @endforeach
                             </tbody>

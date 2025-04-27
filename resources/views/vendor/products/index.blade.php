@@ -128,40 +128,44 @@
     <div class="row mb-3">
         <div class="col d-flex justify-content-between">
             <!-- Search bar -->
-            <form action="{{ route('vendor.product.index') }}" method="get">
-                <div class="search-container d-flex align-items-center">
-                    <input type="text" class="form-control search-input" name="search" placeholder="Search Products" aria-label="Search" />
-                    <!-- Search Icon -->
-                    <button class="btn search-btn" type="submit">
+            <form action="{{ route('vendor.product.index') }}" method="get" class="search-form">
+                <div class="input-group">
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Search products..."
+                        aria-label="Search products">
+                    <button class="btn btn-dark" type="submit">
                         <i class="bi bi-search"></i>
                     </button>
                 </div>
             </form>
 
-            <div class="d-flex align-items-center gap-3">
-                <div class="mb-3">
-                    <form action="{{ route('vendor.product.index') }}" method="get">
-                        <select
-                            class="form-select form-select-lg"
-                            name="filter"
-                            onchange="this.form.submit()"
-                            id="filter">
-                            <option selected disabled>Select Category</option>
-                            <option value="">All</option>
-                            @foreach ($categories as $category)
-                            <option value="{{ $category->id }}" {{ request('filter') == $category->id ? 'selected' : '' }}>
-                                {{ $category->category_name }}
-                            </option>
-                            @endforeach
-                        </select>
-                    </form>
-                </div>
+
+            <div class="d-flex align-items-center justify-content-center gap-3">
+                <form action="{{ route('vendor.product.index') }}" method="get">
+                    <select
+                        class="form-select form-select-md"
+                        name="filter"
+                        onchange="this.form.submit()"
+                        id="filter">
+                        <option selected disabled>Select Category</option>
+                        <option value="">All</option>
+                        @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" {{ request('filter') == $category->id ? 'selected' : '' }}>
+                            {{ $category->category_name }}
+                        </option>
+                        @endforeach
+                    </select>
+                </form>
+
 
                 <!-- Add Product button -->
                 <a
                     name=""
                     id=""
-                    class="btn my-2 custom-btn"
+                    class="btn my-2 custom-btn mb-4"
                     href="{{ route('vendor.product.create') }}"
                     role="button">
                     + Add Product

@@ -1,5 +1,6 @@
 <style>
     .content {
+        background-color: rgba(172, 172, 173, 0.1);
         display: flex;
         justify-content: flex-end;
         /* Align items to the right */

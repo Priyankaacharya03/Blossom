@@ -57,7 +57,6 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-
     //change password
     public function showChangePasswordForm()
     {
@@ -96,25 +95,26 @@ class UserController extends Controller
 
     //orders
 
-    public function orders()
+    public function orders(Request $request)
     {
         $user_id = Auth::id();
+        $filter = $request->query('filter');
 
-        // Get all orders for the logged-in user, with their related order items and products
-        // Add pagination for better performance with many orders
-        $orders = Order::with(['orderItems.product'])
+        // Start the query builder
+        $ordersQuery = Order::where('user_id', $user_id) // Filter by user_id
+            ->with(['orderItems.product'])
             ->withCount('orderItems')
-            ->where('user_id', $user_id)
-            ->latest()
-            ->paginate(5); // Show 5 orders per page
+            ->latest();
 
+        // If a filter is provided, add the 'order_status' condition
+        if ($filter) {
+            $ordersQuery->where('order_status', $filter);
+        }
+
+        $orders = $ordersQuery->get();
 
         return view('site.pages.order', compact('orders'));
     }
-
-    // Add this method to handle order cancellation
-
-
 
 
     public function orderDetails($order_id)

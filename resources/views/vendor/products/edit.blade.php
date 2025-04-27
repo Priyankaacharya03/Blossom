@@ -1,4 +1,4 @@
-@extends('vendor.layouts.main')
+
 
 @section('title','Product')
 

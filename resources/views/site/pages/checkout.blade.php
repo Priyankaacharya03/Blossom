@@ -240,10 +240,10 @@
             <div class="col-12 mb-3">
               <h5 class="checkout-title">Payment Method</h5>
               <div class="mb-3">
-                <select class="form-select form-select-lg" name="payment_method" id="payment_method">
+                <select class="form-select form-select" name="payment_method" id="payment_method">
                   <option selected disabled>Select Payment</option>
                   <option value="cod">Cash on Delivery (COD)</option>
-                  <option value="khalti">Pay with Khalti</option>
+                  <option value="khalti">Khalti</option>
                 </select>
               </div>
             </div>

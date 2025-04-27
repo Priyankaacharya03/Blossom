@@ -184,28 +184,19 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <form action="{{ route('cart.update', $cart->id) }}" method="POST">
-                                        <div class="quantity-control">
-                                            <button type="button" class="quantity-btn decrease-btn" data-id="{{ $cart->id }}">-</button>
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="text"
-                                                class="quantity-input"
-                                                value="{{ $cart->quantity }}"
-                                                name="quantity"
-                                                data-id="{{ $cart->id }}"
-                                                data-price="{{ $cart->product->price }}"
-                                                data-discount="{{ $cart->product->discount_percent }}"
-                                                readonly>
-                                            <button type="button" class="quantity-btn increase-btn" data-id="{{ $cart->id }}">+</button>
-                                            <button
-                                                type="submit"
-                                                class="btn btn-sm btn-primary">
-                                                Update
-                                            </button>
-                                        </div>
+                                    <div class="quantity-control">
+                                        <button type="button" class="quantity-btn decrease-btn" data-id="{{ $cart->id }}">-</button>
+                                        <input type="text"
+                                            class="quantity-input"
+                                            value="{{ $cart->quantity }}"
+                                            name="quantity"
+                                            data-id="{{ $cart->id }}"
+                                            data-price="{{ $cart->product->price }}"
+                                            data-discount="{{ $cart->product->discount_percent }}"
+                                            readonly>
+                                        <button type="button" class="quantity-btn increase-btn" data-id="{{ $cart->id }}">+</button>
+                                    </div>
 
-                                    </form>
                                 </td>
                                 <td class="price-text">Rs.{{ number_format($cart->product->price, 2) }}</td>
                                 <td class="price-text item-total">Rs.{{ number_format($cart->quantity * $cart->product->price, 2) }}</td>
@@ -306,8 +297,34 @@
             updateSummary()
 
             // Update the server with the new quantity
-            // updateCartQuantity(cartId, quantity)
+            updateCartQuantity(cartId, quantity);
         }
+
+        // Update the server with the new quantity (fetch API)
+        function updateCartQuantity(cartId, quantity) {
+            const url = `/cart/update/${cartId}`; // Assuming your route is /cart/update/{cartId}
+            const formData = new FormData();
+            formData.append('quantity', quantity);
+            formData.append('_token', '{{ csrf_token() }}'); // CSRF token for security
+
+            fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Cart updated successfully');
+                    } else {
+                        alert('Failed to update cart');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating cart:', error);
+                    alert('Error updating cart');
+                });
+        }
+
 
         // Update Order Summary (Subtotal, Quantity, Total)
         function updateSummary() {

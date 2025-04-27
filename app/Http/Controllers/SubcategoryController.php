@@ -67,8 +67,6 @@ class SubcategoryController extends Controller
     }
 
 
-
-
     public function getSubcategories($category_id)
     {
         $subcategories = Subcategory::where('category_id', $category_id)->get();

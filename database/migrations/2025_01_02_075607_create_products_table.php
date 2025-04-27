@@ -21,10 +21,12 @@ return new class extends Migration
             $table->integer('stock');
             $table->string('primary_image')->nullable();
             $table->boolean('is_feature')->default(false);
+            $table->unsignedBigInteger('subcategory_id');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('vendor_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreign('vendor_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('subcategory_id')->references('id')->on('subcategories')->onDelete('cascade');
+            $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete(action: 'cascade');
             $table->timestamps();
         });
     }

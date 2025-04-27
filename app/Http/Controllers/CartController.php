@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ShippingAddress;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
@@ -55,10 +56,14 @@ class CartController extends Controller
 
         $cart = Cart::where('user_id', $user_id)->where('product_id', $pid)->first();
 
+        $wishlist = Wishlist::where('user_id', $user_id)->where('product_id', $pid)->first();
+
+        $wishlist->delete();
+
         if ($cart) {
             if (($cart->quantity + $quantity) > $product->stock) {
                 toastr()->error('Not enough stock available');
-                return redirect()->route('index');
+                return redirect()->back();
             }
             $cart->quantity += $quantity;
         } else {
@@ -70,7 +75,7 @@ class CartController extends Controller
         $cart->save();
 
         toastr()->success('Successfully added to cart');
-        return redirect()->route('index');
+        return redirect()->back();
     }
 
     // public function updateCart(Request $request, $id)
@@ -90,34 +95,76 @@ class CartController extends Controller
     //     return redirect()->route('cart.getCarts');
     // }
 
-    public function updateCart(Request $request, $id)
-    {
-        // Find the cart item
-        $cart = Cart::findOrFail($id);
+    // public function updateCart(Request $request, $id)
+    // {
+    //     // Find the cart item
+    //     $cart = Cart::findOrFail($id);
 
-        // Validate the quantity input
+    //     // Validate the quantity input
+    //     $request->validate([
+    //         'quantity' => 'required|numeric|min:1',
+    //     ]);
+
+    //     // Find the product related to the cart item
+    //     $product = Product::where('id', $cart->product_id)->first(); // Assuming you use `product_id` to reference the product
+
+    //     // Check if requested quantity is more than the available stock
+    //     if ($request->quantity > $product->stock) {
+    //         // Display an error if the requested quantity exceeds stock
+    //         toastr()->error('Only ' . $product->stock . ' items are available in stock.');
+    //         return redirect()->back(); // Redirect back with error message
+    //     }
+
+    //     // Update the cart with the new quantity
+    //     $cart->quantity = $request->quantity;
+    //     $cart->save();
+
+    //     // Optionally, you can show a success message when the cart is updated
+    //     toastr()->success('Cart updated successfully!');
+    //     return redirect()->back();
+    // }
+
+    public function update(Request $request, $cartId)
+    {
+        // Validate incoming data
         $request->validate([
-            'quantity' => 'required|numeric|min:1',
+            'quantity' => 'required|integer|min:1',
         ]);
 
-        // Find the product related to the cart item
-        $product = Product::where('id', $cart->product_id)->first(); // Assuming you use `product_id` to reference the product
-
-        // Check if requested quantity is more than the available stock
-        if ($request->quantity > $product->stock) {
-            // Display an error if the requested quantity exceeds stock
-            toastr()->error('Only ' . $product->stock . ' items are available in stock.');
-            return redirect()->back(); // Redirect back with error message
+        // Find the cart item
+        $cart = Cart::find($cartId);
+        if (!$cart) {
+            return response()->json(['error' => 'Cart item not found'], 404);
         }
 
-        // Update the cart with the new quantity
+        // Update the quantity
         $cart->quantity = $request->quantity;
         $cart->save();
 
-        // Optionally, you can show a success message when the cart is updated
-        toastr()->success('Cart updated successfully!');
-        return redirect()->back();
+        // Recalculate the subtotal, total, and discount values for the updated cart
+        $product = $cart->product;
+        $subtotal = $cart->quantity * $product->price;
+        $discountAmount = ($product->price * $product->discount_percent / 100) * $cart->quantity;
+        $total = $subtotal - $discountAmount;
+
+        // Recalculate the order summary (subtotal, quantity, discount, total)
+        $orderSummary = [
+            'subtotal' => $subtotal,
+            'quantity' => $cart->quantity,
+            'discount' => $discountAmount,
+            'total' => $total,
+        ];
+
+        // Return updated data as JSON
+        return response()->json([
+            'success' => true,
+            'subtotal' => $orderSummary['subtotal'],
+            'quantity' => $orderSummary['quantity'],
+            'discount' => $orderSummary['discount'],
+            'total' => $orderSummary['total'],
+        ]);
     }
+
 
 
     public function updateQuantity($id, $quantity)

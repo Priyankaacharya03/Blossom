@@ -54,54 +54,10 @@
                                     <td>{{ $order->created_at->format('Y-m-d') }}</td>
                                     <td>{{ $order->orderItems->count() }}</td>
                                     <td>
-                                        <div class="dropdown">
-                                            <i class="bi bi-three-dots" data-bs-toggle="dropdown" role="button" style="cursor: pointer;" aria-expanded="false"></i>
-                                            <div class="dropdown-menu">
-
-                                                <a class="dropdown-item" href="{{ route('admin.order.items',$order->id) }}">View Items</a>
-
-                                                <!-- Button trigger modal -->
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeStatus{{ $order->id }}">
-                                                    Change Status
-                                                </button>
-
-
-
-                                            </div>
-                                        </div>
+                                        <a href="{{ route('admin.order.items', $order->id) }}" class="btn btn-primary btn-sm" style="width: 85px;">
+                                            View Items
+                                        </a>
                                     </td>
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="changeStatus{{ $order->id }}" tabindex="-1" aria-labelledby="changeStatus{{ $order->id }}Label" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <form action="{{ route('admin.order.update.status', $order->id) }}" method="POST">
-                                                    @csrf
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="changeOrderStatusLabel{{ $order->id }}">Update Order Status</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-
-                                                    <div class="modal-body">
-                                                        <div class="mb-3">
-                                                            <label for="status{{ $order->id }}" class="form-label">Status</label>
-                                                            <select class="form-control" name="status" id="status{{ $order->id }}">
-                                                                <option value="active" selected>Accept</option>
-                                                                <option value="rejected">Reject</option>
-                                                            </select>
-                                                            @error('status')
-                                                            <small class="form-text text-danger">{{ $message }}</small>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Update Status</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -15,4 +15,9 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Product::class)->with('category:id,category_name');
     }
+
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class); // Assuming the relationship points to the Vendor model
+    }
 }

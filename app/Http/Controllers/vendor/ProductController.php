@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\Subcategory;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -43,13 +44,16 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('vendor.products.create', compact('categories'));
+        $subcategories = Subcategory::all();
+        return view('vendor.products.create', compact('categories', 'subcategories'));
     }
+
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
             'category_id' => 'required|exists:categories,id',
+            'subcategory_id' => 'required|exists:subcategories,id',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'discount_percent' => 'nullable|numeric|min:0|lt:price',
@@ -60,25 +64,30 @@ class ProductController extends Controller
             'product_image.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
+        $user = Auth::user();
+        $vendor = Vendor::where('user_id', $user->id)->first();
+
         //This ensures no duplicate slugs in the products table
         $slug = Str::slug($request->name);
         while (Product::where('slug', $slug)->exists()) {
             $slug = Str::slug($request->name) . '-' . rand(1, 100);
         }
 
-        // dd($request->all());
+        // dd($vendor->id);
         $product = new Product();
         $product->product_name = $request->name;
         $product->slug = $slug;
         $product->category_id = $request->category_id;
+        $product->subcategory_id = $request->subcategory_id;
         $product->price = $request->price;
         $product->stock = $request->stock;
-
         $product->discount_percent = $request->discount_percent ?? 0;
         $product->primary_image =  $request->file('image')->store('products', 'public');
         $product->is_feature = $request->is_feature;
         $product->description = $request->description;
-        $product->vendor_id = Auth::id();
+        if ($vendor) {
+            $product->vendor_id = $vendor->id;
+        }
         // $product->vendor_id = "";
         $product->save();
 

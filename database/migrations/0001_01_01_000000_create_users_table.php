@@ -13,17 +13,16 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            // $table->unsignedBigInteger('user_type_id');
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('profile_img')->nullable();
             $table->enum('role', ['admin', 'vendor', 'user'])->default('user');
+            $table->enum('status', ['active', 'blocked'])->default('active');
             $table->string('google_id')->nullable();
             $table->string('otp')->nullable();
             $table->timestamp('otp_expires_at')->nullable();
-            // $table->foreign('user_type_id')->references('id')->on('user_type')->onDelete('cascade');
             $table->string('remember_token', 100)->nullable();
             $table->timestamps(); // Created_at and Updated_at
 

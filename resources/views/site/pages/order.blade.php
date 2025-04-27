@@ -204,14 +204,17 @@
             </div>
             <div class="col-auto">
                 <div class="select-container">
-                    <select class="form-select" id="orderFilter">
-                        <option value="all" {{ request('status') == null ? 'selected' : '' }}>All Orders</option>
-                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Processing</option>
-                        <option value="shipped" {{ request('status') == 'shipped' ? 'selected' : '' }}>Shipped</option>
-                        <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered</option>
-                        <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-                    </select>
+                    <form action="{{ route('user.order') }}" method="get">
+                        <select class="form-select" name="filter" onchange="this.form.submit()" id="filter">
+                            <option value="all" {{ request('status') == null ? 'selected' : '' }}>All Orders</option>
+                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                            <option value="processed" {{ request('status') == 'processed' ? 'selected' : '' }}>Processed</option>
+                            <option value="shipped" {{ request('status') == 'shipped' ? 'selected' : '' }}>Shipped</option>
+                            <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered</option>
+                            <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                        </select>
+                    </form>
                 </div>
             </div>
         </div>
@@ -220,14 +223,15 @@
     @foreach($orders as $order)
     <div class="order-container order-item" data-status="{{ $order->status }}">
         <div class="order-header">
-            <div class="d-flex align-items-center">
-                <div class="store-icon">
-                    <i class="fa-solid fa-store"></i>
-                </div>
-                <span class="store-name">Store Name</span>
+            <div class="d-flex align-items-center gap-2">
+
+                <img src="{{ asset('storage/vendors/' . $order->orderItems->first()->vendor->vendor_profile_img) }}" class="vendor-avatar" style="width: 28px; border-radius: 50%;  border: 0.5px solid grey; ">
+
+                <span class="store-name">{{ $order->orderItems->first()->vendor->vendor_name }}</span>
+
             </div>
             <div>
-                <span class="status-badge status-{{ strtolower($order->status) }}">{{ $order->status }}</span>
+                <span class="status-badge status-{{ strtolower($order->order_status) }}">{{ $order->order_status }}</span>
             </div>
         </div>
 
@@ -254,12 +258,10 @@
 
         <div class="order-footer p-3 d-flex justify-content-between align-items-center">
             <div>
-                <span class="text-muted">Order #{{ $order->order_number }}</span>
+                <span class="text-muted">Order No.{{ $order->id }}</span>
                 <span class="ms-3 text-muted">{{ $order->created_at->format('M d, Y') }}</span>
             </div>
             <div>
-                <a href="" class="btn btn-sm btn-outline-primary">View Details</a>
-
                 @if($order->status == 'Delivered')
                 <a href="" class="btn btn-sm btn-outline-success ms-2">Write Review</a>
                 @endif

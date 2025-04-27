@@ -258,24 +258,6 @@
                     @endif
                 </div>
 
-                @auth
-                <div class="mt-4">
-                    <form action="" method="POST" class="border rounded p-3">
-                        @csrf
-                        <div class="mb-3">
-                            <label for="comment" class="form-label">Write a review</label>
-                            <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
-                        </div>
-                        <button type="submit" class="btn text-white" style="background-color: var(--rose-gold);">
-                            Submit Review
-                        </button>
-                    </form>
-                </div>
-                @else
-                <div class="mt-4">
-                    <a href="{{ route('login') }}" class="btn btn-outline-secondary">Login to write a review</a>
-                </div>
-                @endauth
             </div>
         </div>
     </div>

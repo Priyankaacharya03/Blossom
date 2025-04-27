@@ -83,7 +83,7 @@
         color: #333;
     }
 
-    .view-all {
+    /* .view-all {
         color: var(--rose-gold);
         text-decoration: none;
         font-weight: 500;
@@ -91,7 +91,7 @@
 
     .view-all:hover {
         text-decoration: underline;
-    }
+    } */
 
     .carousel-wrapper {
         overflow: hidden;
@@ -455,7 +455,7 @@
                 <div class="carousel-caption">
                     <h2>Summer Collection</h2>
                     <p>Up to 50% off on selected items</p>
-                    <a href="#" class="btn btn-primary btn-lg">Shop Now</a>
+                    <a href="" class="btn btn-primary btn-lg">Shop Now</a>
                 </div>
             </div>
             <div class="carousel-item">
@@ -463,7 +463,7 @@
                 <div class="carousel-caption">
                     <h2>New Arrivals</h2>
                     <p>Check out our latest products</p>
-                    <a href="#" class="btn btn-primary btn-lg">Shop Now</a>
+                    <a href="" class="btn btn-primary btn-lg">Shop Now</a>
                 </div>
             </div>
             <div class="carousel-item">
@@ -490,7 +490,7 @@
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">Shop by Categories</h2>
-                <a href="#" class="view-all">View All</a>
+                <!-- <a href="#" class="view-all">View All</a> -->
             </div>
         </div>
         <div class="carousel-wrapper">
@@ -515,7 +515,7 @@
                 <div class="featured-text">
                     <h2>New Arrivals</h2>
                     <p>Discover our latest collection with exclusive designs and premium quality.</p>
-                    <a href="#" class="btn btn-primary">Shop Now</a>
+                    <a href="{{ route('shop') }}" class="btn btn-primary">Shop Now</a>
                 </div>
                 <div class="featured-img" style="background-image: url('{{ asset('assets/images/featured-banner.jpg') }}')">
                 </div>
@@ -528,7 +528,7 @@
         <section class="section">
             <div class="section-header">
                 <h2 class="section-title">Best Selling Products</h2>
-                <a href="#" class="view-all">View All</a>
+                <!-- <a href="#" class="view-all">View All</a> -->
             </div>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                 @foreach ($products->take(4) as $product)
@@ -554,7 +554,7 @@
                             <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
                                 <span class="original-price">Rs.{{ $product->price }}</span>
                                 <span class="actual-price">Rs.{{ $product->actual_amount }}</span>
-                                <span class="discount-badge">{{ $product->discount_amount }}% OFF</span>
+                                <span class="discount-badge">{{ $product->discount_percent}}% OFF</span>
                             </div>
                         </div>
                         <div class="add-to-cart-container">
@@ -576,7 +576,7 @@
             <div class="section-header">
                 <h2 class="section-title">Featured Products</h2>
             </div>
-            <div class="row justify-content-center row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                 @foreach ($featured_products->take(4) as $product)
                 <div class="col">
                     <div class="product-card">
@@ -601,7 +601,7 @@
                                 <span class="original-price">Rs.{{ $product->price }}</span>
                                 <span class="actual-price">Rs.{{ $product->actual_amount }}</span>
                                 @if(isset($product->discount_amount) && $product->discount_amount > 0)
-                                <span class="discount-badge">{{ $product->discount_amount }}% OFF</span>
+                                <span class="discount-badge">{{ $product->discount_percent }}% OFF</span>
                                 @endif
                             </div>
                         </div>
@@ -627,7 +627,7 @@
 
             @if ($products->count() > 0)
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-                @foreach ($products->take(8) as $product)
+                @foreach ($products->take(12) as $product)
                 <div class="col">
                     <div class="product-card">
                         <div class="img-container">
@@ -649,7 +649,7 @@
                             <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
                                 <span class="original-price">Rs.{{ $product->price }}</span>
                                 <span class="actual-price">Rs.{{ $product->actual_amount }}</span>
-                                <span class="discount-badge">{{ $product->discount_amount }}% OFF</span>
+                                <span class="discount-badge">{{ $product->discount_percent }}% OFF</span>
                             </div>
                         </div>
                         <div class="add-to-cart-container">

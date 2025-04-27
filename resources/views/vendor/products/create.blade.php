@@ -158,4 +158,36 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const categorySelect = document.getElementById('category_id');
+        const subcategorySelect = document.getElementById('subcategory_id');
+
+        categorySelect.addEventListener('change', function() {
+            const categoryId = this.value;
+
+            subcategorySelect.innerHTML = '<option value="">Loading...</option>';
+
+            if (categoryId) {
+                fetch(`/vendor/get-subcategories/${categoryId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+                        data.forEach(function(subcat) {
+                            subcategorySelect.innerHTML += `<option value="${subcat.id}">${subcat.subcategory_name}</option>`;
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching subcategories:', error);
+                        subcategorySelect.innerHTML = '<option value="">Error loading</option>';
+                    });
+            } else {
+                subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+            }
+        });
+    });
+</script>
+
+
 @endsection

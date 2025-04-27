@@ -297,7 +297,7 @@
                     <li><a class="dropdown-item" href="{{ route('user.profile') }}"><i class="bi bi-person"></i> My Profile</a></li>
                     <li><a class="dropdown-item" href="{{ route('user.password.change') }}"><i class="bi bi-key"></i> Change Password</a></li>
                     <li><a class="dropdown-item" href="{{ route('user.order') }}"><i class="bi bi-receipt"></i> My Orders</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-clock-history"></i> History</a></li>
+
                     <li>
                         <hr class="dropdown-divider">
                     </li>

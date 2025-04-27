@@ -129,18 +129,13 @@
             <div class="col-lg-4 col-md-6 mb-4">
                 <h5>About Blossom</h5>
                 <p>Discover the finest collection of fashion and lifestyle products. We bring you quality, style, and elegance all in one place.</p>
-                <div class="newsletter-form">
-                    <input type="email" class="newsletter-input" placeholder="Your email">
-                    <button class="newsletter-btn">Subscribe</button>
-                </div>
+
             </div>
             <div class="col-lg-2 col-md-6 mb-4">
                 <h5>Quick Links</h5>
                 <ul class="list-unstyled">
                     <li><a href="{{ route('index') }}" class="text-decoration-none">Home</a></li>
                     <li><a href="{{ route('shop') }}" class="text-decoration-none">Shop</a></li>
-                    <li><a href="#" class="text-decoration-none">About Us</a></li>
-                    <li><a href="#" class="text-decoration-none">Contact</a></li>
                     <li><a href="#" class="text-decoration-none">FAQ</a></li>
                 </ul>
             </div>
@@ -150,7 +145,6 @@
                     <li><a href="{{ route('user.profile') }}" class="text-decoration-none">My Account</a></li>
                     <li><a href="#" class="text-decoration-none">Order Tracking</a></li>
                     <li><a href="{{ route('wishlist') }}" class="text-decoration-none">Wishlist</a></li>
-                    <li><a href="#" class="text-decoration-none">Returns & Exchanges</a></li>
                 </ul>
             </div>
             <div class="col-lg-3 col-md-6 mb-4">
