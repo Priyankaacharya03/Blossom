@@ -271,6 +271,7 @@
                     Edit Profile
                 </button>
 
+                <!-- Modal -->
                 <div class="modal fade" id="editProfile{{ $user->id }}" tabindex="-1" aria-labelledby="editProfile{{ $user->id }}Label" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -308,23 +309,22 @@
                                     @enderror
                                 </div>
 
+
                                 <div class="mb-4">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="text" class="form-control" email="email" id="email"
-                                        value="{{ old('email', $user->email) }}" placeholder="Enter your full email">
+                                    <input type="text" class="form-control" id="email"
+                                        value="{{ old('email', $user->email) }}" placeholder="Your email" readonly>
                                 </div>
 
                                 <!-- Submit Button -->
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-save">Save Changes</button>
                                 </div>
+
                             </form>
-
-
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <!-- Profile Information Column (Right Side) -->
@@ -349,13 +349,30 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="section-title">Addresses</h5>
                         <div class="profile-value"></div>
-                        <button class="btn btn-add"><i class="fas fa-plus"></i> Add</button>
+
                     </div>
 
+                    <!-- Check if there are shipping addresses -->
+                    @if ($shippingInfo->isNotEmpty())
+                    <!-- If there are addresses, display them -->
+                    <div class="address-list">
+                        @foreach ($shippingInfo as $address)
+                        <div class="address-card">
+                            <p>{{ $address->address }}</p>
+                            <p>{{ $address->state }}, Postal code - {{ $address->postal_code }}</p>
+                            Contact <p>{{ $address->phone_number }}</p>
+                        </div>
+                        @endforeach
+                    </div>
+                    @else
+                    <!-- If no addresses, show no data message -->
                     <div class="no-data-message">
                         <i class="fas fa-info-circle"></i> No addresses added
                     </div>
+                    <button class="btn btn-add"><i class="fas fa-plus"></i> Add</button>
+                    @endif
                 </div>
+
             </div>
         </div>
     </div>

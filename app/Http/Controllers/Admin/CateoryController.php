@@ -11,11 +11,41 @@ use Illuminate\Support\Facades\Storage;
 
 class CateoryController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        $categories = Category::all();
-        return view('admin.products.product_category', compact('categories'));
+        $search = $request->query('search');  // Get search query from request
+        $filter = $request->query('filter');  // Get filter query from request
+
+        // Start the query
+        $query = Category::query();
+
+        // Apply search filter if there is a search query
+        if ($search) {
+            $query->where('category_name', 'like', '%' . $search . '%');
+        }
+
+        // Apply filter if there is a filter query
+        if ($filter) {
+            $query->where('id', $filter);  // Filter by category id, assuming you're filtering by category
+        }
+
+        // Paginate the categories
+        $categories = $query->paginate(10);
+
+        // Get all categories to pass to the view for the dropdown
+        $allCategories = Category::all();
+
+        // Return the view with categories and the list of all categories
+        return view('admin.products.product_category', compact('categories', 'allCategories'));
     }
+
+
+    // public function index()
+    // {
+    //     $categories = Category::all();
+    //     return view('admin.products.product_category', compact('categories'));
+    // }
     public function store(Request $request)
     {
         $request->validate([

@@ -94,6 +94,7 @@
 
   .continue-btn:hover {
     background-color: #D18C7D;
+    color: white;
   }
 
   .cancel-btn {
@@ -140,6 +141,18 @@
       flex-direction: column;
     }
   }
+
+  .btn-outline-custom {
+    color: #DEA193;
+    border: 1px solid #DEA193;
+    background-color: transparent;
+  }
+
+  .btn-outline-custom:hover {
+    color: #fff;
+    background-color: #DEA193;
+    border-color: #DEA193;
+  }
 </style>
 
 <section class="checkout-section">
@@ -151,7 +164,7 @@
           @csrf
           <div class="checkout-container">
             <h5 class="checkout-title">Shipping Details</h5>
-            <button type="button" class="btn btn-outline-warning btn-sm" id="clearAddress"
+            <button type="button" class="btn btn-outline-custom btn-sm" id="clearAddress"
               onclick="clearForm()" title="Clear Address">
               <i class="bi bi-arrow-clockwise me-1"></i> Clear
             </button>
@@ -218,6 +231,7 @@
                   <option value="koshi" @selected(old('state', 'koshi' )=='koshi' )>Koshi</option>
                   <option value="madesh" @selected(old('state', 'madesh' )=='madesh' )>Madhesh</option>
                   <option value="gandaki" @selected(old('state', 'gandaki' )=='gandaki' )>Gandaki</option>
+                  <option value="bagmati" @selected(old('state', 'bagmati' )=='bagmati' )>Bagmati</option>
                   <option value="lumbini" @selected(old('state', 'lumbini' )=='lumbini' )>Lumbini</option>
                   <option value="karnali" @selected(old('state', 'karnali' )=='karnali' )>Karnali</option>
                   <option value="sudurpaschim" @selected(old('state', 'sudurpaschim' )=='sudurpaschim' )>Sudurpaschim</option>
@@ -246,6 +260,9 @@
                   <option value="khalti">Khalti</option>
                 </select>
               </div>
+              @error('payment_method')
+              <div class="error-text">{{ $message }}</div>
+              @enderror
             </div>
 
             <div class="button-group">

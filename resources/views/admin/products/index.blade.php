@@ -1,3 +1,40 @@
+<style>
+    /* Search and Add Product buttons */
+    .custom-btn {
+        background-color: #4a4a4a !important;
+        color: white !important;
+        border: 1px solid rgba(101, 101, 101, 0.3);
+        border-radius: 0 4px 4px 0;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .custom-btn:hover {
+        background-color: #4a4a4a;
+        color: white;
+        border-color: #4a4a4a;
+    }
+
+    .search-btn i {
+        font-size: 1rem;
+    }
+
+    /* Category dropdown */
+    .form-select {
+        border-color: #e0e0e0;
+        transition: all 0.3s ease;
+    }
+
+    .form-select:focus {
+        border-color: rgba(172, 172, 173, 0.5);
+        box-shadow: 0 0 5px rgba(172, 172, 173, 0.3);
+    }
+</style>
+
 @extends('admin.layouts.main')
 
 @section('title', 'Product-index')
@@ -8,12 +45,56 @@
 
     <div class="row">
         <div class="col">
-            <a
-                name=""
-                id=""
-                class="btn btn-primary my-2"
-                href="{{ route('admin.product.create') }}"
-                role="button"> + Add Product</a>
+
+            <div class="row mb-3">
+                <div class="col d-flex justify-content-between">
+                    <!-- Search bar -->
+                    <form action="{{ route('admin.product.index') }}" method="get" class="search-form">
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                name="search"
+                                class="form-control"
+                                placeholder="Search products..."
+                                aria-label="Search products">
+                            <button class="btn btn-dark" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+
+
+                    <div class="d-flex align-items-center justify-content-center gap-3">
+                        <form action="{{ route('admin.product.index') }}" method="get">
+                            <select
+                                class="form-select form-select-md"
+                                name="filter"
+                                onchange="this.form.submit()"
+                                id="filter">
+                                <option selected disabled>Select Category</option>
+                                <option value="">All</option>
+                                @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ request('filter') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->category_name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </form>
+
+
+                        <!-- Add Product button -->
+                        <a
+                            name=""
+                            id=""
+                            class="btn my-2 custom-btn mb-4"
+                            href="{{ route('admin.product.create') }}"
+                            role="button">
+                            + Add Product
+                        </a>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="card mb-4">
                 <h5 class="card-header">Products</h5>

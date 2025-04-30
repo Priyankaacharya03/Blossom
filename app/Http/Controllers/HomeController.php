@@ -15,7 +15,7 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $featured_products = Product::orderByDesc('is_feature')->limit(3)->get();
+        $featured_products = Product::orderByDesc('is_feature')->limit(4)->get();
         $products = Product::latest()->limit(15)->get();
         $cart = Cart::all();
 
@@ -30,16 +30,22 @@ class HomeController extends Controller
 
     public function shop(Request $request)
     {
+        // return $request->all();
         // Get all categories with product count
         $categories = Category::withCount('product')->get();
+        // dd($categories);
 
+        // dd($categories);
         // Initialize query builder
         $productsQuery = Product::query();
+
+        // dd($productsQuery);
 
         // Initialize variables
         $selectedCategory = null;
         $selectedSubcategory = null;
         $subcategories = collect();
+        // dd($subcategories);
 
         // Search filter
         if ($request->has('search') && $request->search) {
@@ -53,11 +59,16 @@ class HomeController extends Controller
             // Get selected category for display
             $selectedCategory = Category::find($request->category_id);
 
+            // dd($selectedCategory);
+
             // Get subcategories for the selected category with product count
             if ($selectedCategory) {
                 $subcategories = Subcategory::where('category_id', $request->category_id)
                     ->withCount('product')
+
                     ->get();
+
+                // dd($subcategories);
             }
         }
 
@@ -71,21 +82,21 @@ class HomeController extends Controller
 
         // Price range filter
         if ($request->has('min_price') && $request->min_price) {
-            $productsQuery->where('actual_amount', '>=', $request->min_price);
+            $productsQuery->where('price', '>=', $request->min_price);
         }
 
         if ($request->has('max_price') && $request->max_price) {
-            $productsQuery->where('actual_amount', '<=', $request->max_price);
+            $productsQuery->where('price', '<=', $request->max_price);
         }
 
         // Sorting
         if ($request->has('sort')) {
             switch ($request->sort) {
                 case 'price_low':
-                    $productsQuery->orderBy('actual_amount', 'asc');
+                    $productsQuery->orderBy('price', 'asc');
                     break;
                 case 'price_high':
-                    $productsQuery->orderBy('actual_amount', 'desc');
+                    $productsQuery->orderBy('price', 'desc');
                     break;
                 case 'newest':
                     $productsQuery->orderBy('created_at', 'desc');

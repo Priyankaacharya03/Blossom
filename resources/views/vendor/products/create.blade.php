@@ -100,31 +100,32 @@
 
                             </div>
 
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="image" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> Primary Image</span></label>
+                                    <input
+                                        type="file"
+                                        class="form-control"
+                                        name="image"
+                                        id="image"
+                                        value="{{ old('image') }}" />
+                                    @error('image')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
-                            <div class="mb-3">
-                                <label for="image" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> Primary Image</span></label>
-                                <input
-                                    type="file"
-                                    class="form-control"
-                                    name="image"
-                                    id="image"
-                                    value="{{ old('image') }}" />
-                                @error('image')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="image" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> Product Images</span></label>
-                                <input
-                                    type="file"
-                                    class="form-control"
-                                    name="product_image[]"
-                                    id="image"
-                                    multiple />
-                                @error('product_image')
-                                <div class="text-danger">{{ $message }}</div>
-                                @enderror
+                                <div class="col-md-6">
+                                    <label for="image" class="form-label"><span class="text-danger">*</span><span class="text-capitalize"> Product Images</span></label>
+                                    <input
+                                        type="file"
+                                        class="form-control"
+                                        name="product_image[]"
+                                        id="image"
+                                        multiple />
+                                    @error('product_image')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <div class="mb-3">
@@ -136,7 +137,6 @@
                                 </div>
                             </div>
 
-
                             <div class="mb-3">
                                 <label for="description" class="form-label"><span class="text-capitalize"> description</span></label>
 
@@ -146,11 +146,11 @@
                                 @enderror
                             </div>
 
-                            <button
-                                type="submit"
-                                class="btn btn-primary">
-                                Add
-                            </button>
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-dark" style="width: 30%;">
+                                    Add
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>

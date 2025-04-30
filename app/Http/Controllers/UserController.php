@@ -36,6 +36,8 @@ class UserController extends Controller
             'profile_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
+        // dd($request->all());
+
         $user = Auth::user();
 
         $user->name = $request->name;
@@ -51,6 +53,8 @@ class UserController extends Controller
         }
 
         $user->save();
+
+
 
         // Redirect back with a success message
         toastr()->success('Profile updated successfully.');
@@ -112,7 +116,6 @@ class UserController extends Controller
         }
 
         $orders = $ordersQuery->get();
-
         return view('site.pages.order', compact('orders'));
     }
 

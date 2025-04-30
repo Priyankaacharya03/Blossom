@@ -9,19 +9,7 @@
     <div class="row">
         <div class="col">
             <div>
-                <form action="">
-                    <div class="mb-3">
-                        <label for="" class="form-label">Name</label>
-                        <input
-                            type="search"
-                            class="form-control"
-                            name="search"
-                            id="search"
-                            aria-describedby="helpId"
-                            placeholder="Search by name or email..." />
-                    </div>
 
-                </form>
             </div>
 
             <div class="card mb-4">
@@ -54,7 +42,7 @@
                                     <td>{{ $vendorRequest->city }}</td>
                                     <td>{{ $vendorRequest->vendor_address }}</td>
                                     <td>
-                                        <div class="dropdown">
+                                        <div class="dropdown dropstart">
                                             <!-- Dropdown trigger -->
                                             <i class="bi bi-three-dots" data-bs-toggle="dropdown" role="button" style="cursor: pointer;" aria-expanded="false"></i>
 

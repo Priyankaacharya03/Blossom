@@ -27,15 +27,11 @@
                                     <h3 class="fw-bold">{{ number_format($totalUsers) }}</h3>
                                 </div>
                                 <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
-                                    <i class="bi bi-people fs-4 text-primary"></i>
+                                    <i class="bi bi-people fs-4 text-white"></i>
+
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center mt-3">
-                                <span class="badge bg-success d-flex align-items-center">
-                                    <i class="bi bi-arrow-up me-1"></i> 12%
-                                </span>
-                                <span class="text-muted ms-2 small">Since last month</span>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -50,15 +46,10 @@
                                     <h3 class="fw-bold">{{ number_format($totalOrders) }}</h3>
                                 </div>
                                 <div class="bg-warning bg-opacity-10 p-3 rounded-circle">
-                                    <i class="bi bi-cart fs-4 text-warning"></i>
+                                    <i class="bi bi-cart fs-4 text-white"></i>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center mt-3">
-                                <span class="badge bg-success d-flex align-items-center">
-                                    <i class="bi bi-arrow-up me-1"></i> 8%
-                                </span>
-                                <span class="text-muted ms-2 small">Since last month</span>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -72,16 +63,11 @@
                                     <p class="text-muted small mb-1">Total Vendors</p>
                                     <h3 class="fw-bold">{{ number_format($totalVendors) }}</h3>
                                 </div>
-                                <div class="bg-purple bg-opacity-10 p-3 rounded-circle">
-                                    <i class="bi bi-shop fs-4 text-purple"></i>
+                                <div class="bg-info bg-opacity-10 p-3 rounded-circle">
+                                    <i class="bi bi-shop fs-4 text-white"></i>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center mt-3">
-                                <span class="badge bg-danger d-flex align-items-center">
-                                    <i class="bi bi-arrow-down me-1"></i> 3%
-                                </span>
-                                <span class="text-muted ms-2 small">Since last month</span>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -96,15 +82,10 @@
                                     <h3 class="fw-bold">${{ number_format($totalRevenue) }}</h3>
                                 </div>
                                 <div class="bg-success bg-opacity-10 p-3 rounded-circle">
-                                    <i class="bi bi-currency-dollar fs-4 text-success"></i>
+                                    <i class="bi bi-currency-dollar fs-4 text-white"></i>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center mt-3">
-                                <span class="badge bg-success d-flex align-items-center">
-                                    <i class="bi bi-arrow-up me-1"></i> 14%
-                                </span>
-                                <span class="text-muted ms-2 small">Since last month</span>
-                            </div>
+
                         </div>
                     </div>
                 </div>

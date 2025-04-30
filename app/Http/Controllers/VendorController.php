@@ -33,7 +33,7 @@ class VendorController extends Controller
             'phone_number'        => 'required|digits:10',
             'pan_number'          => 'required|digits:9',
             'vendor_profile_img'  => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'document'            => 'required|mimes:pdf|max:5120',
+            'document'            => 'required|mimes:pdf,jpeg,png,jpg|max:5120',
         ]);
 
 

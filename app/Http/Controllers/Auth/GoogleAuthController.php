@@ -24,7 +24,8 @@ class GoogleAuthController extends Controller
         $exist_user = User::where('email', $googleUser->getEmail())->first();
 
         if (!$exist_user) {
-            $user_type = UserType::create(['role' => 'customer']);
+            // $user_type = UserType::create(['role' => 'customer']);
+            $user = User::create(['role' => 'user']);
 
             $user = User::create([
                 'name' => $googleUser->getName(),
@@ -33,7 +34,7 @@ class GoogleAuthController extends Controller
                 'password' => bcrypt(Str::random(12)),
                 'profile_img' => $googleUser->avatar,
                 'google_id' => $googleUser->getId(),
-                'user_type_id' => $user_type->id,
+                // 'user_type_id' => $user_type->id,
             ]);
         } else {
             $user = $exist_user;

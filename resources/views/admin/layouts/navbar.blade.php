@@ -1,93 +1,162 @@
-<nav
-    class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-    id="layout-navbar">
-    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-            <i class="bx bx-menu bx-sm"></i>
-        </a>
-    </div>
+<style>
+    .content {
+        background-color: rgba(157, 157, 159, 0.1);
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+    }
 
-    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-        <!-- Search -->
-        <div class="navbar-nav align-items-center">
-            <div class="nav-item d-flex align-items-center">
-                <i class="bx bx-search fs-4 lh-0"></i>
-                <input
-                    type="text"
-                    class="form-control border-0 shadow-none"
-                    placeholder="Search..."
-                    aria-label="Search..." />
-            </div>
-        </div>
-        <!-- /Search -->
+    .profile-img {
+        height: 40px;
+        width: 40px;
+        border: 2px solid #ddd;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+    }
 
-        <ul class="navbar-nav flex-row align-items-center ms-auto">
+    .dropdown-menu {
+        margin-top: 10px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
 
+    .dropdown-item {
+        padding: 10px 20px;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
 
-            <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                    <div class="avatar avatar-online">
-                        <img src="{{ asset('backend/assets/img/avatars/profile.png') }}" alt class="w-px-40 h-auto rounded-circle" />
-                    </div>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="d-flex">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar avatar-online">
-                                        <img src="{{ asset('backend/assets/img/avatars/profile.png') }}" alt class="w-px-40 h-auto rounded-circle" />
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <span class="fw-semibold d-block">Priyanka Acharya</span>
-                                    <small class="text-muted">Admin</small>
+    .dropdown-item:hover {
+        background-color: rgb(220, 219, 219);
+    }
+
+    .dropdown-item i {
+        margin-right: 10px;
+        color: #6c757d;
+    }
+
+    .dropdown-divider {
+        margin: 5px 0;
+    }
+
+    /* Optional: Add a subtle animation */
+    .dropdown-menu.show {
+        animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .dropdown-item .d-flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .avatar {
+        margin-right: 15px;
+    }
+
+    .flex-grow-1 {
+        flex-grow: 1;
+    }
+
+    .fw-semibold {
+        font-weight: 600;
+    }
+
+    .text-muted {
+        color: #6c757d;
+    }
+
+    .navbar-dropdown {
+        display: flex;
+        align-items: center;
+    }
+
+    .avatar img {
+        border-radius: 50%;
+        object-fit: cover;
+        width: 40px;
+        height: 40px;
+    }
+
+    @media (max-width: 991px) {
+        .navbar-brand {
+            position: relative !important;
+            transform: translateX(0) !important;
+            left: 0 !important;
+        }
+    }
+</style>
+
+<!-- Content -->
+<div class="content">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light px-3">
+        @if(Auth::check())
+        <div class="dropdown">
+            <img src="{{ Auth::user()->profile_img ? asset('storage/users/' . Auth::user()->profile_img) : asset('assets/images/default_user.jpg') }}"
+                alt="Profile Image"
+                class="profile-img"
+                id="profileDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="avatar avatar-online">
+                                    <img src="{{ Auth::user()->profile_img ? asset('storage/users/' . Auth::user()->profile_img) : asset('assets/images/default_user.jpg') }}"
+                                        alt="Profile Image" class="w-px-40 h-auto rounded-circle" />
                                 </div>
                             </div>
-                        </a>
-                    </li>
-                    <li>
-                        <div class="dropdown-divider"></div>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="{{ route('admin.profile') }}">
-                            <i class="bx bx-user me-2"></i>
-                            <span class="align-middle">My Profile</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <i class="bx bx-cog me-2"></i>
-                            <span class="align-middle">Settings</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <span class="d-flex align-items-center align-middle">
-                                <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                                <span class="flex-grow-1 align-middle">Billing</span>
-                                <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <div class="dropdown-divider"></div>
-                    </li>
-                    <li>
-
-                        <form action="{{ route('logout') }}" method="post" class="d-inline-block">
+                            <div class="flex-grow-1">
+                                <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
+                                <small class="text-muted">Admin</small>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('admin.profile') }}">
+                        <i class="bi bi-person me-2"></i>
+                        My Profile
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('user.password.change') }}"><i class="bi bi-key"></i> Change Password</a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#">
+                        <i class="bx bx-cog me-2"></i>
+                        Settings
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item text-danger" href="#">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <i class="bx bx-power-off me-2"></i>
-                            <button
-                                type="submit"
-                                class="btn btn-danger align-middle">
+                            <button type="submit" class="btn btn-link text-decoration-none p-0" title="Logout">
                                 Logout
                             </button>
                         </form>
-                    </li>
-                </ul>
-            </li>
-            <!--/ User -->
-        </ul>
-    </div>
-</nav>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        @endif
+    </nav>
+</div>

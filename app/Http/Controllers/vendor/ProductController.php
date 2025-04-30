@@ -36,7 +36,7 @@ class ProductController extends Controller
             $query = Product::with(['category'])->where('vendor_id', $vendor->id);
         }
 
-        $products = $query->paginate(2);
+        $products = $query->paginate(3);
 
         return view('vendor.products.index', compact('products', 'categories'));
     }

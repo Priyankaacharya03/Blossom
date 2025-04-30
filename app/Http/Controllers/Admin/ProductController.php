@@ -14,13 +14,41 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function index()
+    // public function index()
+    // {
+    //     // $products = Product::with('category')->get();
+    //     // $categories = Category::all();
+    //     $products = Product::with(['category', 'vendor'])->get();
+    //     return view('admin.products.index', compact('products'));
+    // }
+
+    public function index(Request $request)
     {
-        // $products = Product::with('category')->get();
-        // $categories = Category::all();
-        $products = Product::with(['category', 'vendor'])->get();
-        return view('admin.products.index', compact('products'));
+        $search = $request->query('search');  // Get search query from request
+        $filter = $request->query('filter');  // Get filter query from request
+
+        // If there is a search query
+        if ($search) {
+            // Filter products by name
+            $query = Product::where('product_name', 'like', '%' . $search . '%')->with(['category']);
+        } elseif ($filter) {
+            // If there is a category filter
+            $query = Product::where('category_id', $filter)->with(['category']);
+        } else {
+            // If no search or filter, get all products
+            $query = Product::with(['category']);
+        }
+
+        // Paginate the products
+        $products = $query->paginate(10);
+
+        // Get all categories to pass to the view
+        $categories = Category::all();
+
+        // Return the view with products and categories
+        return view('admin.products.index', compact('products', 'categories'));
     }
+
 
     public function create()
     {

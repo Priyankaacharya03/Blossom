@@ -1,42 +1,24 @@
-
-<html
-    lang="en"
-    class="light-style layout-menu-fixed"
-    dir="ltr"
-    data-theme="theme-default"
-    data-assets-path="../assets/"
-    data-template="vertical-menu-template-free">
+<!DOCTYPE html>
+<html>
 
 <head>
     @include('admin.layouts.header')
     @stack('header')
 </head>
 
-<body>
-    <div class="layout-wrapper layout-content-navbar">
-        <div class="layout-container">
+<div class="d-flex">
 
-            @include('admin.layouts.sidebar')
+    @include('admin.layouts.sidebar')
 
+    <div class="w-100">
+        @include('admin.layouts.navbar')
 
-            <div class="layout-page">
+        @yield('main-content')
 
-                @include('admin.layouts.navbar')
-
-                <div class="content-wrapper">
-
-                    @yield('main-content')
-
-                    @include('admin.layouts.footer')
-
-                    <div class="content-backdrop fade"></div>
-                </div>
-            </div>
-        </div>
-        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
+</div>
+@include('admin.layouts.footer')
 
-    @include('admin.layouts.footer_script')
-</body>
+@include('vendor.layouts.footer_script')
 
 </html>

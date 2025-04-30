@@ -53,7 +53,7 @@
                                     <td>{{ $vendor->city }}</td>
                                     <td>{{ $vendor->vendor_address }}</td>
                                     <td>
-                                        <div class="dropdown">
+                                        <div class="dropdown dropstart">
                                             <!-- Dropdown trigger -->
                                             <i class="bi bi-three-dots" data-bs-toggle="dropdown" role="button" style="cursor: pointer;" aria-expanded="false"></i>
 

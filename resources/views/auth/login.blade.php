@@ -67,12 +67,18 @@
                 <div class="mb-3">
                     <label for="email" class="form-label">Email address</label>
                     <input type="email" id="email" name="email" value="{{ old('email') }}" class="form-control" required>
+                    @error('email')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" id="password" name="password" class="form-control" required>
                     <div class="text-end mt-2">
                         <a href="{{ route('password.request') }}" class="small">Forgot Password?</a>
+                        @error('password')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <div class="d-grid">

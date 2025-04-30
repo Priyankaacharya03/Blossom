@@ -200,7 +200,7 @@
         animation: fadeIn 0.8s ease-out;
     }
 
-    @keyframes fadeIn {
+    /* @keyframes fadeIn {
         from {
             opacity: 0;
         }
@@ -208,8 +208,11 @@
         to {
             opacity: 1;
         }
-    }
+    } */
 </style>
+
+<h3 class="mt-4" style="text-align: center; color:rgb(102, 101, 101);">Wishlist products</h3>
+
 
 <section class="wishlist-products">
     <div class="container">

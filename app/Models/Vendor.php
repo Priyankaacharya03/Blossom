@@ -25,4 +25,14 @@ class Vendor extends Model
     {
         return $this->hasMany(Product::class, 'vendor_id');
     }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(Vendor::class);
+    }
 }

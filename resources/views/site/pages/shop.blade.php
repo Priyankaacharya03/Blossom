@@ -375,9 +375,9 @@
     </div>
 
     <!-- Search Bar -->
-    <div class="search-container">
+    <!-- <div class="search-container">
         <form action="{{ route('shop') }}" method="GET">
-            <!-- Preserve existing filters when searching -->
+          
             @if(request('category_id'))
             <input type="hidden" name="category_id" value="{{ request('category_id') }}">
             @endif
@@ -403,7 +403,7 @@
                 <i class="bi bi-search"></i>
             </button>
         </form>
-    </div>
+    </div> -->
 
     <!-- Mobile Filter Toggle Button -->
     <button class="btn btn-outline-secondary w-100 mobile-filter-toggle" type="button" onclick="toggleMobileFilter()">
@@ -494,7 +494,7 @@
                                     onchange="document.getElementById('filterForm').submit()">
                                 <label class="form-check-label filter-label" for="category{{ $category->id }}">
                                     {{ $category->category_name }}
-                                    <span class="filter-count">({{ $category->products_count ?? 0 }})</span>
+                                    <span class="filter-count">({{ $category->product_count ?? 0 }})</span>
                                 </label>
                             </div>
                             @endforeach
@@ -517,7 +517,7 @@
                                     onchange="document.getElementById('filterForm').submit()">
                                 <label class="form-check-label filter-label" for="subcategory{{ $subcategory->id }}">
                                     {{ $subcategory->subcategory_name }}
-                                    <span class="filter-count">({{ $subcategory->products_count ?? 0 }})</span>
+                                    <span class="filter-count">({{ $subcategory->product_count ?? 0 }})</span>
                                 </label>
                             </div>
                             @endforeach
@@ -525,7 +525,7 @@
                     </div>
                     @endif
 
-                    <!-- Price Range Filter -->
+                    <!-- Price Range Filter
                     <div class="filter-card">
                         <div class="filter-header">Price Range</div>
                         <div class="filter-body">
@@ -540,13 +540,13 @@
                             <a href="{{ route('shop', request()->except(['min_price', 'max_price', 'page'])) }}"
                                 class="btn btn-reset">Reset Price</a>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Apply Filters Button (Mobile) -->
-                    <div class="d-lg-none">
+                    <!-- <div class="d-lg-none">
                         <button type="submit" class="btn btn-filter">Apply Filters</button>
                         <a href="{{ route('shop') }}" class="btn btn-reset">Reset All</a>
-                    </div>
+                    </div> -->
                 </form>
             </div>
         </div>
@@ -568,7 +568,7 @@
                             <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap">
                                 <span class="original-price">Rs.{{ $product->price }}</span>
                                 <span class="actual-price">Rs.{{ $product->actual_amount }}</span>
-                                <span class="discount-badge">{{ $product->discount_amount }}% OFF</span>
+                                <span class="discount-badge">{{ $product->discount_percent }}% OFF</span>
                             </div>
                         </div>
                         <div class="add-to-cart-container">

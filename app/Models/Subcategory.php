@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Subcategory extends Model
 {
+
+    protected $fillable = [
+        'subcategory_name',
+        'category_id',
+        
+    ];
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
@@ -13,6 +19,6 @@ class Subcategory extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id', 'id');
+        return $this->belongsTo(Product::class,  'id');
     }
 }

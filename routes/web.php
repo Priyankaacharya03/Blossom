@@ -59,10 +59,8 @@ Route::middleware([AuthCheckMiddleware::class])->group(function () {
 
 
     Route::get('/khati/return', [PaymentController::class, 'return']);
-
-    Route::get('/category/{id}', [CateoryController::class, 'showCategory'])->name('category.show');
 });
-
+Route::get('/category/{id}', [CateoryController::class, 'showCategory'])->name('category.show');
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 
 

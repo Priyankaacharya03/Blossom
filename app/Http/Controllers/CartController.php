@@ -58,7 +58,9 @@ class CartController extends Controller
 
         $wishlist = Wishlist::where('user_id', $user_id)->where('product_id', $pid)->first();
 
-        $wishlist->delete();
+        if ($wishlist) {
+            $wishlist->delete();
+        }
 
         if ($cart) {
             if (($cart->quantity + $quantity) > $product->stock) {
@@ -224,7 +226,6 @@ class CartController extends Controller
     {
         // dd($request->all());
 
-
         $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|max:255|email',
@@ -235,6 +236,7 @@ class CartController extends Controller
             'street_no' => 'nullable|max:50',
             'state' => 'required|max:100',
             'is_permanent' => 'required|boolean',
+            'payment_method' => 'required',
         ]);
 
         $user_id = Auth::user()->id;
@@ -244,8 +246,13 @@ class CartController extends Controller
         $carts = Cart::where('user_id', $user_id)->get();
 
         $totalAmount = $carts->sum(function ($cart) {
-            return $cart->product->price * $cart->quantity;
+            return $cart->product->actual_amount * $cart->quantity;
         });
+
+        // Add shipping cost (default 100)
+        $shipping_cost = 100;
+        $totalAmount += $shipping_cost;  // Add shipping cost to the total amount
+
 
         //create new order instance
         $order = new Order();
@@ -293,13 +300,6 @@ class CartController extends Controller
             $shippingInfo->order_id = $order->id;
             $shippingInfo->save();
         }
-
-        // return redirect()->route('cart.confirm', compact('shippingInfo'));
-
-
-        // dd('test');
-
-
 
         // dd($order);
         $orderItems = [];

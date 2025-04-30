@@ -1,13 +1,10 @@
 <style>
     .content {
-        background-color: rgba(172, 172, 173, 0.1);
+        background-color: rgba(157, 157, 159, 0.1);
         display: flex;
         justify-content: flex-end;
-        /* Align items to the right */
         align-items: center;
-        /* Vertically align items */
         width: 100%;
-        /* Ensure the content takes up full width */
     }
 
     .profile-img {
@@ -16,8 +13,6 @@
         border: 1px solid #ccc;
         border-radius: 50%;
         object-fit: cover;
-        margin-left: 10px;
-        /* Add space between the image and other items */
         cursor: pointer;
     }
 
@@ -81,7 +76,8 @@
                 class="profile-img"
                 id="profileDropdown"
                 data-bs-toggle="dropdown"
-                aria-expanded="false">
+                aria-expanded="false"
+                style="margin-left: 10px;">
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                 <li><a class="dropdown-item" href="{{ route('user.profile') }}"><i class="bi bi-person"></i> My Profile</a></li>
                 <li><a class="dropdown-item" href="{{ route('user.password.change') }}"><i class="bi bi-key"></i> Change Password</a></li>

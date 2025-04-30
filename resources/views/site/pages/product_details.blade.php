@@ -215,7 +215,7 @@
                 <form action="{{ route('wishlist.toggle', $product->id) }}" method="POST">
                     @csrf
                     <button type="submit" class="wishlist-icon btn btn-outline-secondary px-3">
-                        <i class="bi bi-heart{{ Auth::user()->wishlists->contains('product_id', $product->id) ? '-fill' : '' }}"></i>
+                        <i class="bi bi-heart{{ Auth::user()?->wishlists?->contains('product_id', $product->id) ? '-fill' : '' }}"></i>
                     </button>
                 </form>
                 <!-- 
